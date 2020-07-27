@@ -8,14 +8,18 @@
         <version>2.3.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.pulawskk</groupId>
     <artifactId>dburger</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>dburger</name>
     <description>RESTful service to manage ordering burgers.</description>
 
+    <packaging>jar</packaging>
+
     <properties>
         <java.version>11</java.version>
+        <postgres.driver.version>42.2.13</postgres.driver.version>
     </properties>
 
     <dependencies>
@@ -49,6 +53,12 @@
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgres.driver.version}</version>
         </dependency>
     </dependencies>
 
