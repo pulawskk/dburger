@@ -2,10 +2,12 @@ package com.pulawskk.dburger.controllers.v1;
 
 import com.pulawskk.dburger.api.v1.model.UserDto;
 import com.pulawskk.dburger.api.v1.model.UserListDto;
+import com.pulawskk.dburger.domain.User;
 import com.pulawskk.dburger.services.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,13 +26,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-class UserControllerTest {
+class UserControllerTest extends AbstractRestController {
 
+    public static final long ID = 23L;
+    public final static String FIRST_NAME = "first name";
     public final static String LAST_NAME = "last name";
+    public static final String EMAIL = "second-email@gmail.com";
 
     @InjectMocks
     UserController userController;
@@ -55,8 +61,8 @@ class UserControllerTest {
         //given
         List<UserDto> usersDto = new ArrayList<>();
         user2 = new UserDto();
-        user2.setId(23L);
-        user2.setEmail("second-email@gmail.com");
+        user2.setId(ID);
+        user2.setEmail(EMAIL);
         usersDto.add(user1);
         usersDto.add(user2);
         UserListDto userList = new UserListDto(usersDto);
@@ -83,5 +89,28 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)));
+    }
+
+    @Test
+    void shouldCreateNewUser_whenUserDtoIsGivenInPostMethod() throws Exception {
+        //given
+        UserDto userDto = new UserDto();
+        userDto.setFirstName(FIRST_NAME);
+        userDto.setLastName(LAST_NAME);
+        userDto.setEmail(EMAIL);
+        userDto.setId(ID);
+        userDto.setUserUrl("/api/v1/users/" + ID);
+
+        when(userService.createNewUser(ArgumentMatchers.any(UserDto.class))).thenReturn(userDto);
+
+        //then
+        mockMvc.perform(post("/api/v1/users/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(userDto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME)))
+                .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
+                .andExpect(jsonPath("$.email", equalTo(EMAIL)))
+                .andExpect(jsonPath("$.user_url", equalTo("/api/v1/users/" + ID)));
     }
 }
