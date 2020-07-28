@@ -10,4 +10,6 @@ public interface UserService {
     UserListDto findUsersDto();
 
     UserDto findUserByLastName(String lastName);
+
+    UserDto createNewUser(UserDto userDto);
 }

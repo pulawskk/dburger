@@ -7,9 +7,11 @@ import com.pulawskk.dburger.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +89,35 @@ class UserServiceImplTest {
             assertThat(userDto.getFirstName(), is(FIRST_NAME));
             assertThat(userDto.getLastName(), is(LAST_NAME));
             assertThat(userDto.getEmail(), is(EMAIL));
+        });
+    }
+
+    @Test
+    void shouldCreateNewUser_whenUserDtoIsGiven() {
+        //given
+        UserDto userDto = new UserDto();
+        userDto.setFirstName(FIRST_NAME);
+        userDto.setLastName(LAST_NAME);
+        userDto.setEmail(EMAIL);
+
+        User user = new User();
+        user.setFirstName(FIRST_NAME);
+        user.setLastName(LAST_NAME);
+        user.setEmail(EMAIL);
+        user.setId(ID);
+
+        when(userRepository.save(ArgumentMatchers.any(User.class))).thenReturn(user);
+
+        //when
+        UserDto savedUserDto = userService.createNewUser(userDto);
+
+        //then
+        assertAll(() -> {
+            assertThat(savedUserDto, notNullValue());
+            assertThat(savedUserDto.getFirstName(), is(FIRST_NAME));
+            assertThat(savedUserDto.getLastName(), is(LAST_NAME));
+            assertThat(savedUserDto.getEmail(), is(EMAIL));
+            assertThat(savedUserDto.getUserUrl(), is("/api/v1/users/" + ID));
         });
     }
 }
