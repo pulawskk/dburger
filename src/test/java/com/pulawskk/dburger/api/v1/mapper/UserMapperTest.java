@@ -18,7 +18,7 @@ class UserMapperTest {
     UserMapper userMapper = UserMapper.INSTANCE;
 
     @Test
-    void shouldConverUserToUserDto_whenUserMapperMethodIsInvoked() {
+    void shouldConvertUserToUserDto_whenUserIsGiven() {
         //given
         User user = new User();
         user.setId(ID);
@@ -36,6 +36,26 @@ class UserMapperTest {
             assertThat(userDto.getFirstName(), is(FIRST_NAME));
             assertThat(userDto.getLastName(), is(LAST_NAME));
             assertThat(userDto.getEmail(), is(EMAIL));
+        });
+    }
+
+    @Test
+    public void shouldConvertUserDtoToUser_whenUserDtoIsGiven() {
+         //given
+        UserDto userDto = new UserDto();
+        userDto.setFirstName(FIRST_NAME);
+        userDto.setLastName(LAST_NAME);
+        userDto.setEmail(EMAIL);
+
+        //when
+        User user = userMapper.userDtoToUser(userDto);
+
+        //then
+        assertAll(() -> {
+            assertThat(user, notNullValue());
+            assertThat(user.getFirstName(), is(FIRST_NAME));
+            assertThat(user.getLastName(), is(LAST_NAME));
+            assertThat(user.getEmail(), is(EMAIL));
         });
     }
 }
