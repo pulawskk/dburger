@@ -21,6 +21,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -92,7 +93,7 @@ class UserControllerTest extends AbstractRestController {
     }
 
     @Test
-    void shouldCreateNewUser_whenUserDtoIsGivenInPostMethod() throws Exception {
+    void shouldCreateNewUser_whenUserDtoIsGivenInPostRequest() throws Exception {
         //given
         UserDto userDto = new UserDto();
         userDto.setFirstName(FIRST_NAME);
@@ -115,7 +116,7 @@ class UserControllerTest extends AbstractRestController {
     }
 
     @Test
-    void shouldUpdateWholeUserObject_whenUserDtoIsGivenInPutMethod() throws Exception {
+    void shouldUpdateWholeUserObject_whenUserDtoIsGivenInPutRequest() throws Exception {
         //given
         UserDto userDto = new UserDto();
         userDto.setFirstName(FIRST_NAME + "update");
@@ -138,7 +139,7 @@ class UserControllerTest extends AbstractRestController {
     }
 
     @Test
-    void shouldUpdatePartOfUserObject_whenPartOfUserDtoIsGivenInPatchMethod() throws Exception {
+    void shouldUpdateUserObject_whenUserIdIsGivenInPatchRequest() throws Exception {
         //given
         UserDto userDto = new UserDto();
         userDto.setFirstName(FIRST_NAME + "patch");
@@ -147,16 +148,26 @@ class UserControllerTest extends AbstractRestController {
         userDto.setId(ID);
         userDto.setUserUrl("/api/v1/users/" + ID);
 
-        when(userService.updateUser(anyLong(), ArgumentMatchers.any(UserDto.class))).thenReturn(userDto);
+        when(userService.patchUser(anyLong(), ArgumentMatchers.any(UserDto.class))).thenReturn(userDto);
 
         //then
         mockMvc.perform(patch("/api/v1/users/" + ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(userDto)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(asJsonString(userDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME + "patch")))
                 .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
                 .andExpect(jsonPath("$.email", equalTo(EMAIL)))
                 .andExpect(jsonPath("$.user_url", equalTo("/api/v1/users/" + ID)));
     }
+
+    @Test
+    void shouldDeletePartOfUserObject_whenPartOfUserDtoIsGivenInDeleteMethod() throws Exception {
+        //given
+        doNothing().when(userService).deleteUser(ID);
+
+        //then
+        mockMvc.perform(delete("/api/v1/users/" + ID))
+                .andExpect(status().isOk());
+         }
 }

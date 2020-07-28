@@ -18,11 +18,11 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -120,5 +120,17 @@ class UserServiceImplTest {
             assertThat(savedUserDto.getEmail(), is(EMAIL));
             assertThat(savedUserDto.getUserUrl(), is("/api/v1/users/" + ID));
         });
+    }
+
+    @Test
+    void shouldDeleteUser_whenUserIdIsGiven() {
+        //given
+        doNothing().when(userRepository).deleteById(ID);
+
+        //when
+        userService.deleteUser(ID);
+
+        //then
+        verify(userRepository, times(1)).deleteById(ID);
     }
 }

@@ -65,4 +65,9 @@ public class UserServiceImpl implements UserService {
             return userMapper.userToUserDto(userRepository.save(u));
         }).orElseThrow(RuntimeException::new);
     }
+
+    @Override
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
 }
