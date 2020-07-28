@@ -22,18 +22,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserListDto findUsersDto() {
-        return new UserListDto(userRepository.findAll().stream().map(UserMapper.INSTANCE::userToUserDto).collect(Collectors.toList()));
+        return new UserListDto(userRepository.findAll().stream().map(userMapper::userToUserDto).collect(Collectors.toList()));
     }
 
     @Override
     public UserDto findUserByLastName(String lastName) {
-        return UserMapper.INSTANCE.userToUserDto(userRepository.findUserByLastName(lastName));
+        return userMapper.userToUserDto(userRepository.findUserByLastName(lastName));
     }
 
     @Override
     public UserDto createNewUser(UserDto userDto) {
-        User savedUser = userRepository.save(UserMapper.INSTANCE.userDtoToUser(userDto));
-        UserDto savedUserDto = UserMapper.INSTANCE.userToUserDto(savedUser);
+        User savedUser = userRepository.save(userMapper.userDtoToUser(userDto));
+        UserDto savedUserDto = userMapper.userToUserDto(savedUser);
         savedUserDto.setUserUrl("/api/v1/users/" + savedUser.getId());
         return savedUserDto;
     }
@@ -41,8 +41,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(Long id, UserDto userDto) {
         userDto.setId(id);
-        User savedUser = userRepository.save(UserMapper.INSTANCE.userDtoToUser(userDto));
-        UserDto savedUserDto = UserMapper.INSTANCE.userToUserDto(savedUser);
+        User savedUser = userRepository.save(userMapper.userDtoToUser(userDto));
+        UserDto savedUserDto = userMapper.userToUserDto(savedUser);
         savedUserDto.setUserUrl("/api/v1/users/" + savedUser.getId());
         return savedUserDto;
     }
