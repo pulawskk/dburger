@@ -1,6 +1,7 @@
 package com.pulawskk.dburger.services;
 
 import com.pulawskk.dburger.api.v1.model.UserDto;
+import com.pulawskk.dburger.api.v1.model.UserListDto;
 import com.pulawskk.dburger.domain.User;
 import com.pulawskk.dburger.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,12 +63,12 @@ class UserServiceImplTest {
         when(userRepository.findAll()).thenReturn(users);
 
         //when
-        List<UserDto> userDtos = userService.findUsersDto();
+        UserListDto userList = userService.findUsersDto();
 
         //then
         assertAll(() -> {
-            assertThat(userDtos, notNullValue());
-            assertThat(userDtos, hasSize(2));
+            assertThat(userList, notNullValue());
+            assertThat(userList.getUsers().size(), is(2));
         });
     }
 

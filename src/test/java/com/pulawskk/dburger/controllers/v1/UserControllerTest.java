@@ -1,6 +1,7 @@
 package com.pulawskk.dburger.controllers.v1;
 
 import com.pulawskk.dburger.api.v1.model.UserDto;
+import com.pulawskk.dburger.api.v1.model.UserListDto;
 import com.pulawskk.dburger.services.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,14 +53,15 @@ class UserControllerTest {
     @Test
     void displayAllUsersDto() throws Exception {
         //given
+        List<UserDto> usersDto = new ArrayList<>();
         user2 = new UserDto();
         user2.setId(23L);
         user2.setEmail("second-email@gmail.com");
-        List<UserDto> usersDto = new ArrayList<>();
         usersDto.add(user1);
         usersDto.add(user2);
+        UserListDto userList = new UserListDto(usersDto);
 
-        when(userService.findUsersDto()).thenReturn(usersDto);
+        when(userService.findUsersDto()).thenReturn(userList);
 
         //then
         mockMvc.perform(get("/api/v1/users/")

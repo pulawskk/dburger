@@ -1,6 +1,7 @@
 package com.pulawskk.dburger.controllers.v1;
 
 import com.pulawskk.dburger.api.v1.model.UserDto;
+import com.pulawskk.dburger.api.v1.model.UserListDto;
 import com.pulawskk.dburger.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> displayAllUsersDto() {
+    public ResponseEntity<UserListDto> displayAllUsersDto() {
         return new ResponseEntity<>(userService.findUsersDto(), HttpStatus.OK);
     }
 
