@@ -33,4 +33,9 @@ public class UserController {
     public ResponseEntity<UserDto> createNewUser(@RequestBody UserDto userDto) {
         return new ResponseEntity<>(userService.createNewUser(userDto), HttpStatus.CREATED);
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable Long id) {
+        return new ResponseEntity<>(userService.updateUser(id, userDto), HttpStatus.OK);
+    }
 }

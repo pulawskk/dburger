@@ -20,20 +20,20 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest extends AbstractRestController {
 
-    public static final long ID = 23L;
+    public static final Long ID = 23L;
     public final static String FIRST_NAME = "first name";
     public final static String LAST_NAME = "last name";
     public static final String EMAIL = "second-email@gmail.com";
@@ -109,6 +109,29 @@ class UserControllerTest extends AbstractRestController {
                         .content(asJsonString(userDto)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME)))
+                .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
+                .andExpect(jsonPath("$.email", equalTo(EMAIL)))
+                .andExpect(jsonPath("$.user_url", equalTo("/api/v1/users/" + ID)));
+    }
+
+    @Test
+    void shouldUpdateWholeUserObject_whenUserDtoIsGivenInPuttMethod() throws Exception {
+        //given
+        UserDto userDto = new UserDto();
+        userDto.setFirstName(FIRST_NAME + "update");
+        userDto.setLastName(LAST_NAME);
+        userDto.setEmail(EMAIL);
+        userDto.setId(ID);
+        userDto.setUserUrl("/api/v1/users/" + ID);
+
+        when(userService.updateUser(anyLong(), ArgumentMatchers.any(UserDto.class))).thenReturn(userDto);
+
+        //then
+        mockMvc.perform(put("/api/v1/users/" + ID)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(asJsonString(userDto)))
+                    .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME + "update")))
                 .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
                 .andExpect(jsonPath("$.email", equalTo(EMAIL)))
                 .andExpect(jsonPath("$.user_url", equalTo("/api/v1/users/" + ID)));

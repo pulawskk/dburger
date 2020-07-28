@@ -12,4 +12,6 @@ public interface UserService {
     UserDto findUserByLastName(String lastName);
 
     UserDto createNewUser(UserDto userDto);
+
+    UserDto updateUser(Long id, UserDto userDto);
 }

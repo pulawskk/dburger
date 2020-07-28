@@ -36,4 +36,13 @@ public class UserServiceImpl implements UserService {
         savedUserDto.setUserUrl("/api/v1/users/" + savedUser.getId());
         return savedUserDto;
     }
+
+    @Override
+    public UserDto updateUser(Long id, UserDto userDto) {
+        userDto.setId(id);
+        User savedUser = userRepository.save(UserMapper.INSTANCE.userDtoToUser(userDto));
+        UserDto savedUserDto = UserMapper.INSTANCE.userToUserDto(savedUser);
+        savedUserDto.setUserUrl("/api/v1/users/" + savedUser.getId());
+        return savedUserDto;
+    }
 }
