@@ -51,7 +51,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findUsersDto() {
+    void shouldFindAllUsers_whenUsersExist() {
         //given
         user2 = new User();
         user2.setId(ID + 2);
@@ -73,7 +73,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findUserByLastName() {
+    void shouldFindOneUser_whenLastNameIsGivenAndUserExists() {
         //given
         when(userRepository.findUserByLastName(LAST_NAME)).thenReturn(user1);
 

@@ -18,7 +18,7 @@ class UserMapperTest {
     UserMapper userMapper = UserMapper.INSTANCE;
 
     @Test
-    void userToUserDto() {
+    void shouldConverUserToUserDto_whenUserMapperMethodIsInvoked() {
         //given
         User user = new User();
         user.setId(ID);

@@ -51,7 +51,7 @@ class UserControllerTest {
     }
 
     @Test
-    void displayAllUsersDto() throws Exception {
+    void shouldDisplayAllUsers_whenApiIsCalledWithoutParameters() throws Exception {
         //given
         List<UserDto> usersDto = new ArrayList<>();
         user2 = new UserDto();
@@ -71,7 +71,7 @@ class UserControllerTest {
     }
 
     @Test
-    void displayUserByLastName() throws Exception {
+    void shouldDisplayOneUser_whenApiIsCalledWithSpecificLastName() throws Exception {
         //given
         user1.setLastName(LAST_NAME);
         when(userService.findUserByLastName(LAST_NAME)).thenReturn(user1);
