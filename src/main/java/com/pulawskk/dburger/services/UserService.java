@@ -14,4 +14,6 @@ public interface UserService {
     UserDto createNewUser(UserDto userDto);
 
     UserDto updateUser(Long id, UserDto userDto);
+
+    UserDto patchUser(Long id, UserDto userDto);
 }

@@ -1,5 +1,6 @@
 package com.pulawskk.dburger.services;
 
+import com.pulawskk.dburger.api.v1.mapper.UserMapperImpl;
 import com.pulawskk.dburger.api.v1.model.UserDto;
 import com.pulawskk.dburger.api.v1.model.UserListDto;
 import com.pulawskk.dburger.domain.User;
@@ -11,7 +12,6 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.*;
 
@@ -38,12 +37,14 @@ class UserServiceImplTest {
     @Mock
     UserRepository userRepository;
 
+    UserMapperImpl userMapper;
+
     @InjectMocks
     UserServiceImpl userService;
 
     @BeforeEach
     void setUp() {
-        userService = new UserServiceImpl(userRepository);
+        userService = new UserServiceImpl(userRepository, userMapper);
         user1 = new User();
         user1.setId(ID);
         user1.setFirstName(FIRST_NAME);

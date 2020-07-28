@@ -7,16 +7,17 @@ import com.pulawskk.dburger.domain.User;
 import com.pulawskk.dburger.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -44,5 +45,24 @@ public class UserServiceImpl implements UserService {
         UserDto savedUserDto = UserMapper.INSTANCE.userToUserDto(savedUser);
         savedUserDto.setUserUrl("/api/v1/users/" + savedUser.getId());
         return savedUserDto;
+    }
+
+    @Override
+    public UserDto patchUser(Long id, UserDto userDto) {
+        return userRepository.findById(id).map(u -> {
+            if (userDto.getFirstName() != null) {
+                u.setFirstName(userDto.getFirstName());
+            }
+
+            if (userDto.getLastName() != null) {
+                u.setLastName(userDto.getLastName());
+            }
+
+            if (userDto.getEmail() != null) {
+                u.setEmail(userDto.getEmail());
+            }
+
+            return userMapper.userToUserDto(userRepository.save(u));
+        }).orElseThrow(RuntimeException::new);
     }
 }

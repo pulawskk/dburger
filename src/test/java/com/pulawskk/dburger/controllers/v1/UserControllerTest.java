@@ -115,7 +115,7 @@ class UserControllerTest extends AbstractRestController {
     }
 
     @Test
-    void shouldUpdateWholeUserObject_whenUserDtoIsGivenInPuttMethod() throws Exception {
+    void shouldUpdateWholeUserObject_whenUserDtoIsGivenInPutMethod() throws Exception {
         //given
         UserDto userDto = new UserDto();
         userDto.setFirstName(FIRST_NAME + "update");
@@ -132,6 +132,29 @@ class UserControllerTest extends AbstractRestController {
                     .content(asJsonString(userDto)))
                     .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME + "update")))
+                .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
+                .andExpect(jsonPath("$.email", equalTo(EMAIL)))
+                .andExpect(jsonPath("$.user_url", equalTo("/api/v1/users/" + ID)));
+    }
+
+    @Test
+    void shouldUpdatePartOfUserObject_whenPartOfUserDtoIsGivenInPatchMethod() throws Exception {
+        //given
+        UserDto userDto = new UserDto();
+        userDto.setFirstName(FIRST_NAME + "patch");
+        userDto.setLastName(LAST_NAME);
+        userDto.setEmail(EMAIL);
+        userDto.setId(ID);
+        userDto.setUserUrl("/api/v1/users/" + ID);
+
+        when(userService.updateUser(anyLong(), ArgumentMatchers.any(UserDto.class))).thenReturn(userDto);
+
+        //then
+        mockMvc.perform(patch("/api/v1/users/" + ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME + "patch")))
                 .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
                 .andExpect(jsonPath("$.email", equalTo(EMAIL)))
                 .andExpect(jsonPath("$.user_url", equalTo("/api/v1/users/" + ID)));

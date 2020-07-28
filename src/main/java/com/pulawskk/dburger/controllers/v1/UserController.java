@@ -38,4 +38,9 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable Long id) {
         return new ResponseEntity<>(userService.updateUser(id, userDto), HttpStatus.OK);
     }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<UserDto> patchUser(@RequestBody UserDto userDto, @PathVariable Long id) {
+        return new ResponseEntity<>(userService.patchUser(id, userDto), HttpStatus.OK);
+    }
 }
