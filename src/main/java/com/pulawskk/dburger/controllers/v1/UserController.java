@@ -4,7 +4,6 @@ import com.pulawskk.dburger.api.v1.model.UserDto;
 import com.pulawskk.dburger.api.v1.model.UserListDto;
 import com.pulawskk.dburger.services.UserService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,33 +19,38 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<UserListDto> displayAllUsersDto() {
-        return new ResponseEntity<>(userService.findUsersDto(), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public UserListDto displayAllUsersDto() {
+        return userService.findUsersDto();
     }
 
     @GetMapping("/{lastName}")
-    public ResponseEntity<UserDto> displayUserByLastName(@PathVariable String lastName) {
-        return new ResponseEntity<>(userService.findUserByLastName(lastName), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto displayUserByLastName(@PathVariable String lastName) {
+        return userService.findUserByLastName(lastName);
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createNewUser(@RequestBody UserDto userDto) {
-        return new ResponseEntity<>(userService.createNewUser(userDto), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDto createNewUser(@RequestBody UserDto userDto) {
+        return userService.createNewUser(userDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable Long id) {
-        return new ResponseEntity<>(userService.updateUser(id, userDto), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto updateUser(@RequestBody UserDto userDto, @PathVariable Long id) {
+        return userService.updateUser(id, userDto);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> patchUser(@RequestBody UserDto userDto, @PathVariable Long id) {
-        return new ResponseEntity<>(userService.patchUser(id, userDto), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto patchUser(@RequestBody UserDto userDto, @PathVariable Long id) {
+        return userService.patchUser(id, userDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUserById(@PathVariable Long id) {
         userService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
