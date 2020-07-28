@@ -71,7 +71,7 @@ class UserControllerTest extends AbstractRestController {
         when(userService.findUsersDto()).thenReturn(userList);
 
         //then
-        mockMvc.perform(get("/api/v1/users/")
+        mockMvc.perform(get(getUserBaseUrl())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.users", hasSize(2)));
@@ -86,7 +86,7 @@ class UserControllerTest extends AbstractRestController {
         UserDto actualUserDto = userService.findUserByLastName(LAST_NAME);
 
         //then
-        mockMvc.perform(get("/api/v1/users/" + LAST_NAME)
+        mockMvc.perform(get(getUserBaseUrl() + LAST_NAME)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)));
@@ -100,19 +100,19 @@ class UserControllerTest extends AbstractRestController {
         userDto.setLastName(LAST_NAME);
         userDto.setEmail(EMAIL);
         userDto.setId(ID);
-        userDto.setUserUrl("/api/v1/users/" + ID);
+        userDto.setUserUrl(getUserBaseUrl() + ID);
 
         when(userService.createNewUser(ArgumentMatchers.any(UserDto.class))).thenReturn(userDto);
 
         //then
-        mockMvc.perform(post("/api/v1/users/")
+        mockMvc.perform(post(getUserBaseUrl())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(userDto)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME)))
                 .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
                 .andExpect(jsonPath("$.email", equalTo(EMAIL)))
-                .andExpect(jsonPath("$.user_url", equalTo("/api/v1/users/" + ID)));
+                .andExpect(jsonPath("$.user_url", equalTo(getUserBaseUrl() + ID)));
     }
 
     @Test
@@ -123,19 +123,19 @@ class UserControllerTest extends AbstractRestController {
         userDto.setLastName(LAST_NAME);
         userDto.setEmail(EMAIL);
         userDto.setId(ID);
-        userDto.setUserUrl("/api/v1/users/" + ID);
+        userDto.setUserUrl(getUserBaseUrl() + ID);
 
         when(userService.updateUser(anyLong(), ArgumentMatchers.any(UserDto.class))).thenReturn(userDto);
 
         //then
-        mockMvc.perform(put("/api/v1/users/" + ID)
+        mockMvc.perform(put(getUserBaseUrl() + ID)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(asJsonString(userDto)))
                     .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME + "update")))
                 .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
                 .andExpect(jsonPath("$.email", equalTo(EMAIL)))
-                .andExpect(jsonPath("$.user_url", equalTo("/api/v1/users/" + ID)));
+                .andExpect(jsonPath("$.user_url", equalTo(getUserBaseUrl() + ID)));
     }
 
     @Test
@@ -146,19 +146,19 @@ class UserControllerTest extends AbstractRestController {
         userDto.setLastName(LAST_NAME);
         userDto.setEmail(EMAIL);
         userDto.setId(ID);
-        userDto.setUserUrl("/api/v1/users/" + ID);
+        userDto.setUserUrl(getUserBaseUrl() + ID);
 
         when(userService.patchUser(anyLong(), ArgumentMatchers.any(UserDto.class))).thenReturn(userDto);
 
         //then
-        mockMvc.perform(patch("/api/v1/users/" + ID)
+        mockMvc.perform(patch(getUserBaseUrl() + ID)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(asJsonString(userDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME + "patch")))
                 .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
                 .andExpect(jsonPath("$.email", equalTo(EMAIL)))
-                .andExpect(jsonPath("$.user_url", equalTo("/api/v1/users/" + ID)));
+                .andExpect(jsonPath("$.user_url", equalTo(getUserBaseUrl() + ID)));
     }
 
     @Test
@@ -167,7 +167,7 @@ class UserControllerTest extends AbstractRestController {
         doNothing().when(userService).deleteUser(ID);
 
         //then
-        mockMvc.perform(delete("/api/v1/users/" + ID))
+        mockMvc.perform(delete(getUserBaseUrl() + ID))
                 .andExpect(status().isOk());
          }
 }

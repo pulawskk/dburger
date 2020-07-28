@@ -12,4 +12,8 @@ public abstract class AbstractRestController {
             throw new RuntimeException("Error with processing json", e);
         }
     }
+
+    public static String getUserBaseUrl() {
+        return UserController.USER_BASE_URL + "/";
+    }
 }
