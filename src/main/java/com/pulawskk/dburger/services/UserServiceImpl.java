@@ -3,10 +3,12 @@ package com.pulawskk.dburger.services;
 import com.pulawskk.dburger.api.v1.mapper.UserMapper;
 import com.pulawskk.dburger.api.v1.model.UserDto;
 import com.pulawskk.dburger.api.v1.model.UserListDto;
+import com.pulawskk.dburger.controllers.v1.UserController;
 import com.pulawskk.dburger.domain.User;
 import com.pulawskk.dburger.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,8 +24,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserListDto findUsersDto() {
-        return new UserListDto(userRepository.findAll().stream().map(userMapper::userToUserDto).collect(Collectors.toList()));
+        return new UserListDto(userRepository.findAll().stream()
+                .map(userMapper::userToUserDto)
+                .map(setUrlForUserDto)
+                .collect(Collectors.toList()));
     }
+
+    private final Function<UserDto, UserDto> setUrlForUserDto = (userDto) -> {
+        userDto.setUserUrl(UserController.USER_BASE_URL + "/" + userDto.getId());
+        return userDto;
+    };
 
     @Override
     public UserDto findUserByLastName(String lastName) {

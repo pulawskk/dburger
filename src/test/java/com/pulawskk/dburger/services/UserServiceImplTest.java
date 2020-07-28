@@ -50,7 +50,6 @@ class UserServiceImplTest {
         user1.setFirstName(FIRST_NAME);
         user1.setLastName(LAST_NAME);
         user1.setEmail(EMAIL);
-
     }
 
     @Test
