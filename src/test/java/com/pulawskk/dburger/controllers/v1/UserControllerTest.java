@@ -78,12 +78,10 @@ class UserControllerTest extends AbstractRestController {
     }
 
     @Test
-    void shouldDisplayOneUser_whenApiIsCalledWithSpecificLastName() throws Exception {
+    void shouldReturnOneUserDto_whenSpecificLastNameIsGivenForGetRequest() throws Exception {
         //given
         user1.setLastName(LAST_NAME);
         when(userService.findUserByLastName(LAST_NAME)).thenReturn(user1);
-
-        UserDto actualUserDto = userService.findUserByLastName(LAST_NAME);
 
         //then
         mockMvc.perform(get(getUserBaseUrl() + LAST_NAME)
@@ -139,7 +137,7 @@ class UserControllerTest extends AbstractRestController {
     }
 
     @Test
-    void shouldUpdateUserObject_whenUserIdIsGivenInPatchRequest() throws Exception {
+    void shouldUpdateUserObject_whenPartOfUserDtoIsGivenInPatchRequest() throws Exception {
         //given
         UserDto userDto = new UserDto();
         userDto.setFirstName(FIRST_NAME + "patch");
@@ -162,12 +160,34 @@ class UserControllerTest extends AbstractRestController {
     }
 
     @Test
-    void shouldDeletePartOfUserObject_whenPartOfUserDtoIsGivenInDeleteMethod() throws Exception {
+    void shouldDeleteUserObject_whenUserIdIsGivenInDeleteRequest() throws Exception {
         //given
         doNothing().when(userService).deleteUser(ID);
 
         //then
         mockMvc.perform(delete(getUserBaseUrl() + ID))
                 .andExpect(status().isOk());
-         }
+    }
+
+    @Test
+    void shouldReturnOneUserDto_whenSpecificIdIsGivenToGetRequestAndUserExists() throws Exception {
+        //given
+        UserDto userDto = new UserDto();
+        userDto.setId(ID);
+        userDto.setFirstName(FIRST_NAME);
+        userDto.setLastName(LAST_NAME);
+        userDto.setEmail(EMAIL);
+        userDto.setUserUrl(getUserBaseUrl() + ID);
+
+        when(userService.findUserById(anyLong())).thenReturn(userDto);
+
+        //then
+        mockMvc.perform(get(getUserBaseUrl() + ID)
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME)))
+                .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
+                .andExpect(jsonPath("$.email", equalTo(EMAIL)))
+                .andExpect(jsonPath("$.user_url", equalTo(getUserBaseUrl() + ID)));
+    }
 }

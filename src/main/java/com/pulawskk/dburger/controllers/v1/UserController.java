@@ -6,6 +6,8 @@ import com.pulawskk.dburger.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+
 @RestController
 @RequestMapping(UserController.USER_BASE_URL)
 public class UserController {
@@ -24,10 +26,15 @@ public class UserController {
         return userService.findUsersDto();
     }
 
-    @GetMapping("/{lastName}")
+    @GetMapping("/{param}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto displayUserByLastName(@PathVariable String lastName) {
-        return userService.findUserByLastName(lastName);
+    public UserDto displayUserByLastNameOrId(@PathVariable String param) {
+        try {
+            Long id = Long.parseLong(param);
+            return userService.findUserById(id);
+        } catch (NumberFormatException e) {
+            return userService.findUserByLastName(param);
+        }
     }
 
     @PostMapping
