@@ -5,6 +5,7 @@ import com.pulawskk.dburger.api.v1.model.UserDto;
 import com.pulawskk.dburger.api.v1.model.UserListDto;
 import com.pulawskk.dburger.controllers.v1.UserController;
 import com.pulawskk.dburger.domain.User;
+import com.pulawskk.dburger.exceptions.ResourceNotFoundException;
 import com.pulawskk.dburger.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findUserById(Long id) {
-        UserDto userDto = UserMapper.INSTANCE.userToUserDto(userRepository.findById(id).orElseThrow(RuntimeException::new));
+        User user = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        UserDto userDto = UserMapper.INSTANCE.userToUserDto(user);
         userDto.setUserUrl(getUserBaseUrl() + userDto.getId());
         return userDto;
     }
@@ -46,7 +48,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findUserByLastName(String lastName) {
-        UserDto userDto = UserMapper.INSTANCE.userToUserDto(userRepository.findUserByLastName(lastName));
+        User user = userRepository.findUserByLastName(lastName);
+        if (user == null) {
+            throw new ResourceNotFoundException();
+        }
+        UserDto userDto = UserMapper.INSTANCE.userToUserDto(user);
         userDto.setUserUrl(getUserBaseUrl() + userDto.getId());
         return userDto;
     }
@@ -84,7 +90,7 @@ public class UserServiceImpl implements UserService {
             }
 
             return UserMapper.INSTANCE.userToUserDto(userRepository.save(u));
-        }).orElseThrow(RuntimeException::new);
+        }).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override

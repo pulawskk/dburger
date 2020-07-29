@@ -2,7 +2,9 @@ package com.pulawskk.dburger.controllers.v1;
 
 import com.pulawskk.dburger.api.v1.model.UserDto;
 import com.pulawskk.dburger.api.v1.model.UserListDto;
+import com.pulawskk.dburger.controllers.RestResponseEntityExceptionHandler;
 import com.pulawskk.dburger.domain.User;
+import com.pulawskk.dburger.exceptions.ResourceNotFoundException;
 import com.pulawskk.dburger.services.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +25,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -51,7 +56,9 @@ class UserControllerTest extends AbstractRestController {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(userController)
+                .setControllerAdvice(new RestResponseEntityExceptionHandler())
+                .build();
         user1 = new UserDto();
         user1.setId(22L);
         user1.setEmail("myemail@gmail.com");
@@ -189,5 +196,35 @@ class UserControllerTest extends AbstractRestController {
                 .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
                 .andExpect(jsonPath("$.email", equalTo(EMAIL)))
                 .andExpect(jsonPath("$.user_url", equalTo(getUserBaseUrl() + ID)));
+    }
+
+    @Test
+    void shouldThrowResourceNotFoundException_whenUserIsNotFoundByLastName() throws Exception {
+        //given
+        when(userService.findUserByLastName(LAST_NAME)).thenThrow(ResourceNotFoundException.class);
+
+        //then
+        mockMvc.perform(get(getUserBaseUrl() + LAST_NAME)
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            userService.findUserByLastName(LAST_NAME);
+        });
+    }
+
+    @Test
+    void shouldThrowResourceNotFoundException_whenUserIsNotFoundById() throws Exception {
+        //given
+        when(userService.findUserById(ID)).thenThrow(ResourceNotFoundException.class);
+
+        //then
+        mockMvc.perform(get(getUserBaseUrl() + ID)
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            userService.findUserById(ID);
+        });
     }
 }
