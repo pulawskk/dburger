@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
@@ -134,5 +135,24 @@ class UserServiceImplTest {
 
         //then
         verify(userRepository, times(1)).deleteById(ID);
+    }
+
+    @Test
+    void shouldReturnUserDto_whenSpecificIdIsGivenAndUserExists() {
+        //given
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user1));
+
+        //when
+        UserDto userDto = userService.findUserById(ID);
+
+        //then
+        assertAll(() -> {
+            assertThat(userDto, notNullValue());
+            assertThat(userDto.getFirstName(), is(FIRST_NAME));
+            assertThat(userDto.getLastName(), is(LAST_NAME));
+            assertThat(userDto.getEmail(), is(EMAIL));
+            assertThat(userDto.getId(), is(ID));
+            assertThat(userDto.getUserUrl(), is(getBaseUrl() + ID));
+        });
     }
 }

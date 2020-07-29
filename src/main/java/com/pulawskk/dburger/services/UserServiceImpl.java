@@ -27,6 +27,13 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList()));
     }
 
+    @Override
+    public UserDto findUserById(Long id) {
+        UserDto userDto = UserMapper.INSTANCE.userToUserDto(userRepository.findById(id).orElseThrow(RuntimeException::new));
+        userDto.setUserUrl("/api/v1/users/" + userDto.getId());
+        return userDto;
+    }
+
     private final Function<UserDto, UserDto> setUrlForUserDto = (userDto) -> {
         userDto.setUserUrl(UserController.USER_BASE_URL + "/" + userDto.getId());
         return userDto;

@@ -9,6 +9,8 @@ public interface UserService {
 
     UserListDto findUsersDto();
 
+    UserDto findUserById(Long id);
+
     UserDto findUserByLastName(String lastName);
 
     UserDto createNewUser(UserDto userDto);
