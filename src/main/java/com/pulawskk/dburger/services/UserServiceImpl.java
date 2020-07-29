@@ -15,17 +15,14 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
-
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.userMapper = userMapper;
     }
 
     @Override
     public UserListDto findUsersDto() {
         return new UserListDto(userRepository.findAll().stream()
-                .map(userMapper::userToUserDto)
+                .map(UserMapper.INSTANCE::userToUserDto)
                 .map(setUrlForUserDto)
                 .collect(Collectors.toList()));
     }
@@ -72,7 +69,7 @@ public class UserServiceImpl implements UserService {
                 u.setEmail(userDto.getEmail());
             }
 
-            return userMapper.userToUserDto(userRepository.save(u));
+            return UserMapper.INSTANCE.userToUserDto(userRepository.save(u));
         }).orElseThrow(RuntimeException::new);
     }
 

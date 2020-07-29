@@ -1,6 +1,5 @@
 package com.pulawskk.dburger.services;
 
-import com.pulawskk.dburger.api.v1.mapper.UserMapperImpl;
 import com.pulawskk.dburger.api.v1.model.UserDto;
 import com.pulawskk.dburger.api.v1.model.UserListDto;
 import com.pulawskk.dburger.domain.User;
@@ -37,14 +36,12 @@ class UserServiceImplTest {
     @Mock
     UserRepository userRepository;
 
-    UserMapperImpl userMapper;
-
     @InjectMocks
     UserServiceImpl userService;
 
     @BeforeEach
     void setUp() {
-        userService = new UserServiceImpl(userRepository, userMapper);
+        userService = new UserServiceImpl(userRepository);
         user1 = new User();
         user1.setId(ID);
         user1.setFirstName(FIRST_NAME);
