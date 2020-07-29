@@ -34,7 +34,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findUserByLastName(String lastName) {
-        return UserMapper.INSTANCE.userToUserDto(userRepository.findUserByLastName(lastName));
+        UserDto userDto = UserMapper.INSTANCE.userToUserDto(userRepository.findUserByLastName(lastName));
+        userDto.setUserUrl(UserController.USER_BASE_URL + "/" + userDto.getId());
+        return userDto;
     }
 
     @Override

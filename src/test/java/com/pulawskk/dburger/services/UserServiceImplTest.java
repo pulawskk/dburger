@@ -86,6 +86,7 @@ class UserServiceImplTest {
             assertThat(userDto.getFirstName(), is(FIRST_NAME));
             assertThat(userDto.getLastName(), is(LAST_NAME));
             assertThat(userDto.getEmail(), is(EMAIL));
+            assertThat(userDto.getUserUrl(), is("/api/v1/users/" + ID));
         });
     }
 
