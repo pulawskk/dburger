@@ -15,8 +15,13 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    private static String getUserBaseUrl() {
+        return UserController.USER_BASE_URL + "/";
     }
 
     @Override
@@ -30,19 +35,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findUserById(Long id) {
         UserDto userDto = UserMapper.INSTANCE.userToUserDto(userRepository.findById(id).orElseThrow(RuntimeException::new));
-        userDto.setUserUrl("/api/v1/users/" + userDto.getId());
+        userDto.setUserUrl(getUserBaseUrl() + userDto.getId());
         return userDto;
     }
 
     private final Function<UserDto, UserDto> setUrlForUserDto = (userDto) -> {
-        userDto.setUserUrl(UserController.USER_BASE_URL + "/" + userDto.getId());
+        userDto.setUserUrl(getUserBaseUrl() + userDto.getId());
         return userDto;
     };
 
     @Override
     public UserDto findUserByLastName(String lastName) {
         UserDto userDto = UserMapper.INSTANCE.userToUserDto(userRepository.findUserByLastName(lastName));
-        userDto.setUserUrl(UserController.USER_BASE_URL + "/" + userDto.getId());
+        userDto.setUserUrl(getUserBaseUrl() + userDto.getId());
         return userDto;
     }
 
@@ -50,7 +55,7 @@ public class UserServiceImpl implements UserService {
     public UserDto createNewUser(UserDto userDto) {
         User savedUser = userRepository.save(UserMapper.INSTANCE.userDtoToUser(userDto));
         UserDto savedUserDto = UserMapper.INSTANCE.userToUserDto(savedUser);
-        savedUserDto.setUserUrl("/api/v1/users/" + savedUser.getId());
+        savedUserDto.setUserUrl(getUserBaseUrl() + savedUser.getId());
         return savedUserDto;
     }
 
@@ -59,7 +64,7 @@ public class UserServiceImpl implements UserService {
         userDto.setId(id);
         User savedUser = userRepository.save(UserMapper.INSTANCE.userDtoToUser(userDto));
         UserDto savedUserDto = UserMapper.INSTANCE.userToUserDto(savedUser);
-        savedUserDto.setUserUrl("/api/v1/users/" + savedUser.getId());
+        savedUserDto.setUserUrl(getUserBaseUrl() + savedUser.getId());
         return savedUserDto;
     }
 
