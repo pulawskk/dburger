@@ -35,7 +35,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        User user = userRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User with id: " + id + " does not exist."));
         UserDto userDto = UserMapper.INSTANCE.userToUserDto(user);
         userDto.setUserUrl(getUserBaseUrl() + userDto.getId());
         return userDto;
@@ -50,7 +52,7 @@ public class UserServiceImpl implements UserService {
     public UserDto findUserByLastName(String lastName) {
         User user = userRepository.findUserByLastName(lastName);
         if (user == null) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException("User with last name: " + lastName + " does not exist");
         }
         UserDto userDto = UserMapper.INSTANCE.userToUserDto(user);
         userDto.setUserUrl(getUserBaseUrl() + userDto.getId());

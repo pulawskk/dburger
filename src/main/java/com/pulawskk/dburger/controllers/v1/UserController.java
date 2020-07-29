@@ -2,6 +2,7 @@ package com.pulawskk.dburger.controllers.v1;
 
 import com.pulawskk.dburger.api.v1.model.UserDto;
 import com.pulawskk.dburger.api.v1.model.UserListDto;
+import com.pulawskk.dburger.exceptions.ResourceNotFoundException;
 import com.pulawskk.dburger.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,9 @@ public class UserController {
     public UserDto displayUserByLastNameOrId(@PathVariable String param) {
         try {
             Long id = Long.parseLong(param);
+            if (id < 1) {
+                throw new ResourceNotFoundException("Id must be greater than 0");
+            }
             return userService.findUserById(id);
         } catch (NumberFormatException e) {
             return userService.findUserByLastName(param);

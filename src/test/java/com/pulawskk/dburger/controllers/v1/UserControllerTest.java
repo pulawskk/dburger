@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -26,12 +27,11 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -226,5 +226,23 @@ class UserControllerTest extends AbstractRestController {
         assertThrows(ResourceNotFoundException.class, () -> {
             userService.findUserById(ID);
         });
+    }
+
+    @Test
+    void shouldThrowResourceNotFoundException_whenGivenIdIsNegative() throws Exception {
+        //given
+        Long negativeId = ID * -1L;
+        String negativeIdString = String.valueOf(negativeId);
+
+        //then
+        mockMvc.perform(get(getUserBaseUrl() + negativeId)
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            userController.displayUserByLastNameOrId(negativeIdString);
+        });
+
+        verify(userService, never()).findUserById(ID);
     }
 }

@@ -14,7 +14,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler({ResourceNotFoundException.class})
     public ResponseEntity<Object> handleNotFoundException(Exception exception, WebRequest webRequest) {
-
-        return new ResponseEntity<>("Resource not found.", new HttpHeaders(), HttpStatus.NOT_FOUND);
+        String message = "Resource not found. " + exception.getMessage();
+        return new ResponseEntity<>(message, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 }
