@@ -2,6 +2,7 @@ package com.pulawskk.dburger.services;
 
 import com.pulawskk.dburger.api.v1.model.UserDto;
 import com.pulawskk.dburger.api.v1.model.UserListDto;
+import com.pulawskk.dburger.controllers.v1.UserController;
 import com.pulawskk.dburger.domain.User;
 import com.pulawskk.dburger.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,6 +50,10 @@ class UserServiceImplTest {
         user1.setEmail(EMAIL);
     }
 
+    private static String getBaseUrl() {
+        return UserController.USER_BASE_URL + "/";
+    }
+
     @Test
     void shouldFindAllUsers_whenUsersExist() {
         //given
@@ -86,7 +91,7 @@ class UserServiceImplTest {
             assertThat(userDto.getFirstName(), is(FIRST_NAME));
             assertThat(userDto.getLastName(), is(LAST_NAME));
             assertThat(userDto.getEmail(), is(EMAIL));
-            assertThat(userDto.getUserUrl(), is("/api/v1/users/" + ID));
+            assertThat(userDto.getUserUrl(), is(getBaseUrl() + ID));
         });
     }
 
@@ -115,7 +120,7 @@ class UserServiceImplTest {
             assertThat(savedUserDto.getFirstName(), is(FIRST_NAME));
             assertThat(savedUserDto.getLastName(), is(LAST_NAME));
             assertThat(savedUserDto.getEmail(), is(EMAIL));
-            assertThat(savedUserDto.getUserUrl(), is("/api/v1/users/" + ID));
+            assertThat(savedUserDto.getUserUrl(), is(getBaseUrl() + ID));
         });
     }
 
