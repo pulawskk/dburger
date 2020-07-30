@@ -7,10 +7,10 @@ import com.pulawskk.dburger.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 
 @RestController
 @RequestMapping(UserController.USER_BASE_URL)
+@CrossOrigin
 public class UserController {
 
     public final static String USER_BASE_URL = "/api/v1/users";
