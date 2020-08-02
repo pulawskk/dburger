@@ -1,12 +1,28 @@
 package com.pulawskk.dburger.services;
 
+import com.pulawskk.dburger.api.v1.mapper.OrderMapper;
 import com.pulawskk.dburger.api.v1.model.OrderDto;
 import com.pulawskk.dburger.api.v1.model.OrderListDto;
+import com.pulawskk.dburger.repositories.OrderRepository;
+import org.springframework.stereotype.Service;
 
+import java.util.stream.Collectors;
+
+@Service
 public class OrderServiceImpl implements OrderService {
+
+    private final OrderRepository orderRepository;
+
+    public OrderServiceImpl(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
     @Override
     public OrderListDto findAllOrdersDto() {
-        return null;
+        return new OrderListDto(orderRepository.findAll().stream()
+                .map(OrderMapper.INSTANCE::orderToOrderDto)
+                .map(o -> {o.setOrderUrl("/api/v1/orders/" + o.getId()); return o;})
+                .collect(Collectors.toList()));
     }
 
     @Override
