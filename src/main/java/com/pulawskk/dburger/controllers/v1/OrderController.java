@@ -1,5 +1,6 @@
 package com.pulawskk.dburger.controllers.v1;
 
+import com.pulawskk.dburger.api.v1.model.OrderDto;
 import com.pulawskk.dburger.api.v1.model.OrderListDto;
 import com.pulawskk.dburger.services.OrderService;
 import org.springframework.http.HttpStatus;
@@ -21,5 +22,10 @@ public class OrderController {
     @ResponseStatus(HttpStatus.OK)
     public OrderListDto displayAllOrders() {
         return orderService.findAllOrdersDto();
+    }
+
+    @GetMapping("/{id}")
+    public OrderDto displayOrderDtoById(@PathVariable Long id) {
+        return orderService.findOrderById(id);
     }
 }

@@ -3,6 +3,7 @@ package com.pulawskk.dburger.services;
 import com.pulawskk.dburger.api.v1.mapper.OrderMapper;
 import com.pulawskk.dburger.api.v1.model.OrderDto;
 import com.pulawskk.dburger.api.v1.model.OrderListDto;
+import com.pulawskk.dburger.exceptions.ResourceNotFoundException;
 import com.pulawskk.dburger.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto findOrderById(Long id) {
-        return null;
+        return OrderMapper.INSTANCE.
+                orderToOrderDto(orderRepository.findById(id).orElseThrow(ResourceNotFoundException::new));
     }
 
     @Override
