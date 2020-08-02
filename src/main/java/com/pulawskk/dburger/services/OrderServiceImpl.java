@@ -29,6 +29,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderListDto findAllOrdersDtoByUserId(Long id) {
+        return new OrderListDto(orderRepository.findAllByUserId(id).stream()
+                .map(OrderMapper.INSTANCE::orderToOrderDto)
+                .map(o -> {
+                    o.setOrderUrl("/api/v1/orders/" + o.getId());
+                    o.setUserId(o.getUserId());
+                    return o;})
+                .collect(Collectors.toList()));
+    }
+
+    @Override
     public OrderDto findOrderById(Long id) {
         return null;
     }

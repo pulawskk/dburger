@@ -6,6 +6,8 @@ import com.pulawskk.dburger.api.v1.model.OrderListDto;
 public interface OrderService {
     OrderListDto findAllOrdersDto();
 
+    OrderListDto findAllOrdersDtoByUserId(Long id);
+
     OrderDto findOrderById(Long id);
 
     OrderDto createNewOrder();

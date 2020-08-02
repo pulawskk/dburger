@@ -1,8 +1,10 @@
 package com.pulawskk.dburger.controllers.v1;
 
+import com.pulawskk.dburger.api.v1.model.OrderListDto;
 import com.pulawskk.dburger.api.v1.model.UserDto;
 import com.pulawskk.dburger.api.v1.model.UserListDto;
 import com.pulawskk.dburger.exceptions.ResourceNotFoundException;
+import com.pulawskk.dburger.services.OrderService;
 import com.pulawskk.dburger.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +18,11 @@ public class UserController {
     public final static String USER_BASE_URL = "/api/v1/users";
 
     private final UserService userService;
+    private final OrderService orderService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, OrderService orderService) {
         this.userService = userService;
+        this.orderService = orderService;
     }
 
     @GetMapping
@@ -39,6 +43,12 @@ public class UserController {
         } catch (NumberFormatException e) {
             return userService.findUserByLastName(param);
         }
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/orders")
+    public OrderListDto displayAllOrdersForSpecificUser(@PathVariable Long id) {
+        return orderService.findAllOrdersDtoByUserId(id);
     }
 
     @PostMapping
