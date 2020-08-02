@@ -16,4 +16,8 @@ public abstract class AbstractRestController {
     public static String getUserBaseUrl() {
         return UserController.USER_BASE_URL + "/";
     }
+
+    public static String getOrderBaseUrl() {
+        return OrderController.ORDER_BASE_URL + "/";
+    }
 }
