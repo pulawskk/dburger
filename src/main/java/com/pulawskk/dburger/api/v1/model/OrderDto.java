@@ -21,4 +21,6 @@ public class OrderDto {
 
     @JsonProperty(value = "user_url")
     private String orderUrl;
+
+    private Long userId;
 }

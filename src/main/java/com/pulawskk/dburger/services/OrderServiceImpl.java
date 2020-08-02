@@ -21,7 +21,10 @@ public class OrderServiceImpl implements OrderService {
     public OrderListDto findAllOrdersDto() {
         return new OrderListDto(orderRepository.findAll().stream()
                 .map(OrderMapper.INSTANCE::orderToOrderDto)
-                .map(o -> {o.setOrderUrl("/api/v1/orders/" + o.getId()); return o;})
+                .map(o -> {
+                    o.setOrderUrl("/api/v1/orders/" + o.getId());
+                    o.setUserId(o.getUserId());
+                    return o;})
                 .collect(Collectors.toList()));
     }
 
