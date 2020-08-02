@@ -3,6 +3,7 @@ package com.pulawskk.dburger.services;
 import com.pulawskk.dburger.api.v1.mapper.OrderMapper;
 import com.pulawskk.dburger.api.v1.model.OrderDto;
 import com.pulawskk.dburger.api.v1.model.OrderListDto;
+import com.pulawskk.dburger.domain.Order;
 import com.pulawskk.dburger.exceptions.ResourceNotFoundException;
 import com.pulawskk.dburger.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
@@ -47,8 +48,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto createNewOrder() {
-        return null;
+    public OrderDto createNewOrder(OrderDto orderDto) {
+        Order orderToBeSaved = OrderMapper.INSTANCE.orderDtoToOrder(orderDto);
+        Order savedOrder = orderRepository.save(orderToBeSaved);
+
+        OrderDto savedOrderDto = OrderMapper.INSTANCE.orderToOrderDto(savedOrder);
+        savedOrderDto.setOrderUrl("/api/v1/orders/" + savedOrder.getId());
+
+        return savedOrderDto;
     }
 
     @Override

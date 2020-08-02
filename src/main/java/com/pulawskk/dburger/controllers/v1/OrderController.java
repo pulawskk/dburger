@@ -25,7 +25,10 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public OrderDto displayOrderDtoById(@PathVariable Long id) {
         return orderService.findOrderById(id);
     }
+
+
 }

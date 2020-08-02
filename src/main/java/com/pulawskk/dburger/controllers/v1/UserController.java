@@ -1,5 +1,6 @@
 package com.pulawskk.dburger.controllers.v1;
 
+import com.pulawskk.dburger.api.v1.model.OrderDto;
 import com.pulawskk.dburger.api.v1.model.OrderListDto;
 import com.pulawskk.dburger.api.v1.model.UserDto;
 import com.pulawskk.dburger.api.v1.model.UserListDto;
@@ -49,6 +50,14 @@ public class UserController {
     @GetMapping("/{id}/orders")
     public OrderListDto displayAllOrdersForSpecificUser(@PathVariable Long id) {
         return orderService.findAllOrdersDtoByUserId(id);
+    }
+
+    @PostMapping("/{id}/orders")
+    @ResponseStatus(HttpStatus.CREATED)
+    public OrderDto createOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) {
+        orderDto.setUserId(id);
+        System.out.println(id + " --- log");
+        return orderService.createNewOrder(orderDto);
     }
 
     @PostMapping
