@@ -24,5 +24,8 @@ public class Order {
     private String ccExpiration;
     private String ccCVV;
     private LocalDateTime placedAt;
+
+    @ManyToOne
+    private User user;
 }
 

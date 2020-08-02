@@ -3,6 +3,7 @@ package com.pulawskk.dburger.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -17,4 +18,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
 }
