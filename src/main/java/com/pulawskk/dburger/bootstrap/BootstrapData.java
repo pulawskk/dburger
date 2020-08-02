@@ -77,7 +77,7 @@ public class BootstrapData implements CommandLineRunner {
         order2.setDeliveryZIP(faker.address().zipCode());
         order2.setDeliveryName(faker.name().title());
         order2.setPlacedAt(LocalDateTime.now());
-        order2.setUser(user2);
+        order2.setUser(user1);
 
         Order order3 = new Order();
         order3.setCcCVV("323");
@@ -101,7 +101,7 @@ public class BootstrapData implements CommandLineRunner {
         order4.setDeliveryZIP(faker.address().zipCode());
         order4.setDeliveryName(faker.name().title());
         order4.setPlacedAt(LocalDateTime.now());
-        order4.setUser(user4);
+        order4.setUser(user3);
         
         orderRepository.save(order1);
         orderRepository.save(order2);
