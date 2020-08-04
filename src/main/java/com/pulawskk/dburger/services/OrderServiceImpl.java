@@ -8,6 +8,7 @@ import com.pulawskk.dburger.exceptions.ResourceNotFoundException;
 import com.pulawskk.dburger.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,7 +66,60 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto patchOrder(Long id, OrderDto orderDto) {
-        return null;
+        OrderDto actualOrder = OrderMapper.INSTANCE.orderToOrderDto(
+                orderRepository.findById(id).orElseThrow(ResourceNotFoundException::new));
+
+        Optional.of(orderDto.getDeliveryName()).ifPresent(o -> {
+            if (!o.isBlank()) {
+                actualOrder.setDeliveryName(o);
+            }
+        });
+
+        Optional.of(orderDto.getDeliveryState()).ifPresent(o -> {
+            if (!o.isBlank()) {
+                actualOrder.setDeliveryState(o);
+            }
+        });
+
+        Optional.of(orderDto.getDeliveryCity()).ifPresent(o -> {
+            if (!o.isBlank()) {
+                actualOrder.setDeliveryCity(o);
+            }
+        });
+
+        Optional.of(orderDto.getDeliveryStreet()).ifPresent(o -> {
+            if (!o.isBlank()) {
+                actualOrder.setDeliveryStreet(o);
+            }
+        });
+
+        Optional.of(orderDto.getDeliveryZIP()).ifPresent(o -> {
+            if (!o.isBlank()) {
+                actualOrder.setDeliveryZIP(o);
+            }
+        });
+
+        Optional.of(orderDto.getCcNumber()).ifPresent(o -> {
+            if (!o.isBlank()) {
+                actualOrder.setCcNumber(o);
+            }
+        });
+
+        Optional.of(orderDto.getCcExpiration()).ifPresent(o -> {
+            if (!o.isBlank()) {
+                actualOrder.setCcExpiration(o);
+            }
+        });
+
+        Optional.of(orderDto.getCcCVV()).ifPresent(o -> {
+            if (!o.isBlank()) {
+                actualOrder.setCcCVV(o);
+            }
+        });
+
+        Order savedOrder = orderRepository.save(OrderMapper.INSTANCE.orderDtoToOrder(actualOrder));
+
+        return OrderMapper.INSTANCE.orderToOrderDto(savedOrder);
     }
 
     @Override

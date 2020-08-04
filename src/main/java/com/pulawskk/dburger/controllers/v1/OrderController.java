@@ -30,5 +30,9 @@ public class OrderController {
         return orderService.findOrderById(id);
     }
 
-
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public OrderDto patchOrderDto(@RequestBody OrderDto orderDto, @PathVariable Long orderId) {
+        return orderService.patchOrder(orderId, orderDto);
+    }
 }
