@@ -35,4 +35,10 @@ public class OrderController {
     public OrderDto patchOrderDto(@RequestBody OrderDto orderDto, @PathVariable Long id) {
         return orderService.patchOrder(id, orderDto);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteOrderDto(@PathVariable Long id) {
+        orderService.deleteOrder(id);
+    }
 }
