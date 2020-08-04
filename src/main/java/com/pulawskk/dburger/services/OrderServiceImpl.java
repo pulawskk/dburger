@@ -69,49 +69,49 @@ public class OrderServiceImpl implements OrderService {
         OrderDto actualOrder = OrderMapper.INSTANCE.orderToOrderDto(
                 orderRepository.findById(id).orElseThrow(ResourceNotFoundException::new));
 
-        Optional.of(orderDto.getDeliveryName()).ifPresent(o -> {
+        Optional.ofNullable(orderDto.getDeliveryName()).ifPresent(o -> {
             if (!o.isBlank()) {
                 actualOrder.setDeliveryName(o);
             }
         });
 
-        Optional.of(orderDto.getDeliveryState()).ifPresent(o -> {
+        Optional.ofNullable(orderDto.getDeliveryState()).ifPresent(o -> {
             if (!o.isBlank()) {
                 actualOrder.setDeliveryState(o);
             }
         });
 
-        Optional.of(orderDto.getDeliveryCity()).ifPresent(o -> {
+        Optional.ofNullable(orderDto.getDeliveryCity()).ifPresent(o -> {
             if (!o.isBlank()) {
                 actualOrder.setDeliveryCity(o);
             }
         });
 
-        Optional.of(orderDto.getDeliveryStreet()).ifPresent(o -> {
+        Optional.ofNullable(orderDto.getDeliveryStreet()).ifPresent(o -> {
             if (!o.isBlank()) {
                 actualOrder.setDeliveryStreet(o);
             }
         });
 
-        Optional.of(orderDto.getDeliveryZIP()).ifPresent(o -> {
+        Optional.ofNullable(orderDto.getDeliveryZIP()).ifPresent(o -> {
             if (!o.isBlank()) {
                 actualOrder.setDeliveryZIP(o);
             }
         });
 
-        Optional.of(orderDto.getCcNumber()).ifPresent(o -> {
+        Optional.ofNullable(orderDto.getCcNumber()).ifPresent(o -> {
             if (!o.isBlank()) {
                 actualOrder.setCcNumber(o);
             }
         });
 
-        Optional.of(orderDto.getCcExpiration()).ifPresent(o -> {
+        Optional.ofNullable(orderDto.getCcExpiration()).ifPresent(o -> {
             if (!o.isBlank()) {
                 actualOrder.setCcExpiration(o);
             }
         });
 
-        Optional.of(orderDto.getCcCVV()).ifPresent(o -> {
+        Optional.ofNullable(orderDto.getCcCVV()).ifPresent(o -> {
             if (!o.isBlank()) {
                 actualOrder.setCcCVV(o);
             }
