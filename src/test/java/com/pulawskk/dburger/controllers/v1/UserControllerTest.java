@@ -1,10 +1,13 @@
 package com.pulawskk.dburger.controllers.v1;
 
+import com.pulawskk.dburger.api.v1.model.OrderDto;
+import com.pulawskk.dburger.api.v1.model.OrderListDto;
 import com.pulawskk.dburger.api.v1.model.UserDto;
 import com.pulawskk.dburger.api.v1.model.UserListDto;
 import com.pulawskk.dburger.controllers.RestResponseEntityExceptionHandler;
 import com.pulawskk.dburger.domain.User;
 import com.pulawskk.dburger.exceptions.ResourceNotFoundException;
+import com.pulawskk.dburger.services.OrderServiceImpl;
 import com.pulawskk.dburger.services.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,6 +46,7 @@ class UserControllerTest extends AbstractRestController {
     public final static String FIRST_NAME = "first name";
     public final static String LAST_NAME = "last name";
     public static final String EMAIL = "second-email@gmail.com";
+    public static final String DELIVERY_NAME = "Test delivery name";
 
     @InjectMocks
     UserController userController;
@@ -50,9 +54,14 @@ class UserControllerTest extends AbstractRestController {
     @Mock
     UserServiceImpl userService;
 
+    @Mock
+    OrderServiceImpl orderService;
+
     MockMvc mockMvc;
 
     UserDto user1, user2;
+
+    OrderDto orderDto;
 
     @BeforeEach
     void setUp() {
@@ -61,7 +70,10 @@ class UserControllerTest extends AbstractRestController {
                 .build();
         user1 = new UserDto();
         user1.setId(22L);
-        user1.setEmail("myemail@gmail.com");
+        user1.setEmail(EMAIL);
+
+        orderDto = new OrderDto();
+        orderDto.setDeliveryName(DELIVERY_NAME);
     }
 
     @Test
@@ -244,5 +256,35 @@ class UserControllerTest extends AbstractRestController {
         });
 
         verify(userService, never()).findUserById(ID);
+    }
+
+    @Test
+    void shouldCreateOrderForSpecificUser_whenOrderDtoAndUserIdAreGiven() throws Exception {
+        //given
+        when(orderService.createNewOrder(any())).thenReturn(orderDto);
+
+        //then
+        mockMvc.perform(post(getUserBaseUrl() + ID + "/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(orderDto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.deliveryName", equalTo(DELIVERY_NAME)));
+    }
+
+    @Test
+    void shouldReturnAllOrdersForSpecificUser_whenUserIdIsGiven() throws Exception {
+        //given
+        List<OrderDto> orders = new ArrayList<>();
+        orders.add(orderDto);
+        OrderListDto orderListDto = new OrderListDto(orders);
+
+        when(orderService.findAllOrdersDtoByUserId(anyLong())).thenReturn(orderListDto);
+
+        //then
+        mockMvc.perform(get(getUserBaseUrl() + ID + "/orders")
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.orders", hasSize(1)))
+                .andExpect(jsonPath("$.orders[0].deliveryName", equalTo(DELIVERY_NAME)));
     }
 }
