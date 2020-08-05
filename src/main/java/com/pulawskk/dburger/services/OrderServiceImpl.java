@@ -3,6 +3,7 @@ package com.pulawskk.dburger.services;
 import com.pulawskk.dburger.api.v1.mapper.OrderMapper;
 import com.pulawskk.dburger.api.v1.model.OrderDto;
 import com.pulawskk.dburger.api.v1.model.OrderListDto;
+import com.pulawskk.dburger.controllers.v1.OrderController;
 import com.pulawskk.dburger.domain.Order;
 import com.pulawskk.dburger.exceptions.ResourceNotFoundException;
 import com.pulawskk.dburger.repositories.OrderRepository;
@@ -21,12 +22,16 @@ public class OrderServiceImpl implements OrderService {
         this.orderRepository = orderRepository;
     }
 
+    public String getOrderUrl() {
+        return OrderController.ORDER_BASE_URL + "/";
+    }
+
     @Override
     public OrderListDto findAllOrdersDto() {
         return new OrderListDto(orderRepository.findAll().stream()
                 .map(OrderMapper.INSTANCE::orderToOrderDto)
                 .map(o -> {
-                    o.setOrderUrl("/api/v1/orders/" + o.getId());
+                    o.setOrderUrl(getOrderUrl() + o.getId());
                     o.setUserId(o.getUserId());
                     return o;})
                 .collect(Collectors.toList()));
@@ -37,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
         return new OrderListDto(orderRepository.findAllByUserId(id).stream()
                 .map(OrderMapper.INSTANCE::orderToOrderDto)
                 .map(o -> {
-                    o.setOrderUrl("/api/v1/orders/" + o.getId());
+                    o.setOrderUrl(getOrderUrl() + o.getId());
                     o.setUserId(o.getUserId());
                     return o;})
                 .collect(Collectors.toList()));
@@ -46,9 +51,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto findOrderById(Long id) {
         Order orderFromDb = orderRepository.findById(id).orElseThrow(() ->
-            new ResourceNotFoundException("User with id: " + id + " does not exist."));
+            new ResourceNotFoundException("Order with id: " + id + " does not exist."));
         OrderDto orderDto = OrderMapper.INSTANCE.orderToOrderDto(orderFromDb);
-        orderDto.setOrderUrl("/api/v1/orders/" + orderFromDb.getId());
+        orderDto.setOrderUrl(getOrderUrl() + orderFromDb.getId());
         return orderDto;
     }
 
@@ -59,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
         Order savedOrder = orderRepository.save(orderToBeSaved);
 
         OrderDto savedOrderDto = OrderMapper.INSTANCE.orderToOrderDto(savedOrder);
-        savedOrderDto.setOrderUrl("/api/v1/orders/" + savedOrder.getId());
+        savedOrderDto.setOrderUrl(getOrderUrl() + savedOrder.getId());
 
         return savedOrderDto;
     }

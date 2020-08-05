@@ -19,7 +19,7 @@ public class OrderDto {
     private String ccCVV;
     private LocalDateTime placedAt;
 
-    @JsonProperty(value = "user_url")
+    @JsonProperty(value = "order_url")
     private String orderUrl;
 
     private Long userId;
