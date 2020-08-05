@@ -1,5 +1,6 @@
 package com.pulawskk.dburger.services;
 
+import com.pulawskk.dburger.api.v1.model.OrderDto;
 import com.pulawskk.dburger.api.v1.model.OrderListDto;
 import com.pulawskk.dburger.domain.Order;
 import com.pulawskk.dburger.domain.User;
@@ -11,18 +12,24 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceImplTest {
 
+    public static final long ID_11 = 11L;
+    public static final long ID_22 = 22L;
+    public static final String DELIVERY_NAME = "delivery test";
     private User user;
     private Order order1, order2;
     private List<Order> orders = new ArrayList<>();
@@ -43,13 +50,15 @@ class OrderServiceImplTest {
         order1 = new Order();
         order2 = new Order();
 
-        order1.setId(11L);
+        order1.setId(ID_11);
         order1.setUser(user);
-        order1.setDeliveryName("delivery 1");
+        order1.setDeliveryName(DELIVERY_NAME);
+        order1.setPlacedAt(LocalDateTime.now());
 
-        order2.setId(22L);
+        order2.setId(ID_22);
         order2.setUser(user);
-        order2.setDeliveryName("delivery 2");
+        order2.setDeliveryName(DELIVERY_NAME);
+        order2.setPlacedAt(LocalDateTime.now());
 
         orders.add(order1);
         orders.add(order2);
@@ -60,7 +69,6 @@ class OrderServiceImplTest {
         //given
         when(orderRepository.findAll()).thenReturn(orders);
 
-
         //when
         OrderListDto actualOrders = orderService.findAllOrdersDto();
 
@@ -68,27 +76,59 @@ class OrderServiceImplTest {
         assertAll(() -> {
             assertThat(actualOrders, notNullValue());
             assertThat(actualOrders.getOrders().size(), is(2));
+            assertThat(actualOrders.getOrders().get(0).getOrderUrl().isBlank(), is(false));
+            assertThat(actualOrders.getOrders().get(0).getPlacedAt(), notNullValue());
         });
-
     }
 
     @Test
-    void findOrderById() {
+    void shouldReturnOrder_whenOrderExistsForSpecificId() {
+        //given
+        when(orderRepository.findById(anyLong())).thenReturn(java.util.Optional.ofNullable(order1));
+
+        //when
+        OrderDto actualOrderDto = orderService.findOrderById(anyLong());
+
+        //then
+        assertAll(() -> {
+            assertThat(actualOrderDto, notNullValue());
+            assertThat(actualOrderDto.getId(), is(ID_11));
+            assertThat(actualOrderDto.getDeliveryName(), is(DELIVERY_NAME));
+            assertThat(actualOrderDto.getOrderUrl(), is("/api/v1/orders/" + ID_11));
+            assertThat(actualOrderDto.getPlacedAt(), notNullValue());
+        });
     }
 
     @Test
-    void createNewOrder() {
+    void shouldCreateNewOrder_whenOrderDtoIsGiven() {
+        //given
+        OrderDto orderDto = new OrderDto();
+        orderDto.setDeliveryName(DELIVERY_NAME);
+
+        when(orderRepository.save(any(Order.class))).thenReturn(order1);
+
+        //when
+        OrderDto createdOrderDto = orderService.createNewOrder(orderDto);
+
+        //then
+        assertAll(() -> {
+            assertThat(createdOrderDto, notNullValue());
+            assertThat(createdOrderDto.getId(), is(ID_11));
+            assertThat(createdOrderDto.getDeliveryName(), is(DELIVERY_NAME));
+            assertThat(createdOrderDto.getOrderUrl(), is("/api/v1/orders/" + ID_11));
+            assertThat(createdOrderDto.getPlacedAt(), notNullValue());
+        });
     }
 
     @Test
-    void updateOrder() {
-    }
+    void shouldDeleteOrder_whenIdIsGivenAndOrderExist() {
+        //given
+        doNothing().when(orderRepository).deleteById(ID_11);
 
-    @Test
-    void patchOrder() {
-    }
+        //when
+        orderService.deleteOrder(ID_11);
 
-    @Test
-    void deleteOrder() {
+        //then
+        verify(orderRepository, times(1)).deleteById(ID_11);
     }
 }

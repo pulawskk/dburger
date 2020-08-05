@@ -8,6 +8,7 @@ import com.pulawskk.dburger.exceptions.ResourceNotFoundException;
 import com.pulawskk.dburger.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -44,24 +45,23 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto findOrderById(Long id) {
-        return OrderMapper.INSTANCE.
-                orderToOrderDto(orderRepository.findById(id).orElseThrow(ResourceNotFoundException::new));
+        Order orderFromDb = orderRepository.findById(id).orElseThrow(() ->
+            new ResourceNotFoundException("User with id: " + id + " does not exist."));
+        OrderDto orderDto = OrderMapper.INSTANCE.orderToOrderDto(orderFromDb);
+        orderDto.setOrderUrl("/api/v1/orders/" + orderFromDb.getId());
+        return orderDto;
     }
 
     @Override
     public OrderDto createNewOrder(OrderDto orderDto) {
         Order orderToBeSaved = OrderMapper.INSTANCE.orderDtoToOrder(orderDto);
+        orderToBeSaved.setPlacedAt(LocalDateTime.now());
         Order savedOrder = orderRepository.save(orderToBeSaved);
 
         OrderDto savedOrderDto = OrderMapper.INSTANCE.orderToOrderDto(savedOrder);
         savedOrderDto.setOrderUrl("/api/v1/orders/" + savedOrder.getId());
 
         return savedOrderDto;
-    }
-
-    @Override
-    public OrderDto updateOrder(Long id, OrderDto orderDto) {
-        return null;
     }
 
     @Override
