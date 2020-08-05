@@ -28,6 +28,7 @@ public class UserServiceImplIT {
 
     UserServiceImpl userService;
 
+
     @BeforeEach
     void setUp() throws Exception {
         BootstrapData bootstrapData = new BootstrapData(userRepository, orderRepository);
@@ -68,6 +69,10 @@ public class UserServiceImplIT {
      * @return id for User object
      */
     private Long getLatestUserIdFromDb() {
+//        Long id = userRepository.findAll().get(0).getId();
+//        System.out.println("log latest user id: " + id);
+//        return id;
+
         return userRepository.findAll().get(0).getId();
     }
 

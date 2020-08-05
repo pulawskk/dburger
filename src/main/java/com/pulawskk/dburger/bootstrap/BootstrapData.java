@@ -50,10 +50,10 @@ public class BootstrapData implements CommandLineRunner {
         user4.setLastName("Boni");
         user4.setEmail("tb@gmail.com");
 
-        userRepository.save(user1);
-        userRepository.save(user2);
-        userRepository.save(user3);
-        userRepository.save(user4);
+        User savedUser1 = userRepository.save(user1);
+        User savedUser2 = userRepository.save(user2);
+        User savedUser3 = userRepository.save(user3);
+        User savedUser4 = userRepository.save(user4);
 
         Order order1 = new Order();
         order1.setCcCVV("123");
@@ -65,7 +65,7 @@ public class BootstrapData implements CommandLineRunner {
         order1.setDeliveryZIP(faker.address().zipCode());
         order1.setDeliveryName(faker.name().title());
         order1.setPlacedAt(LocalDateTime.now());
-        order1.setUser(user1);
+        order1.setUser(savedUser1);
 
         Order order2 = new Order();
         order2.setCcCVV("223");
@@ -77,7 +77,7 @@ public class BootstrapData implements CommandLineRunner {
         order2.setDeliveryZIP(faker.address().zipCode());
         order2.setDeliveryName(faker.name().title());
         order2.setPlacedAt(LocalDateTime.now());
-        order2.setUser(user1);
+        order2.setUser(savedUser1);
 
         Order order3 = new Order();
         order3.setCcCVV("323");
@@ -89,7 +89,7 @@ public class BootstrapData implements CommandLineRunner {
         order3.setDeliveryZIP(faker.address().zipCode());
         order3.setDeliveryName(faker.name().title());
         order3.setPlacedAt(LocalDateTime.now());
-        order3.setUser(user3);
+        order3.setUser(savedUser3);
 
         Order order4 = new Order();
         order4.setCcCVV("423");
@@ -101,7 +101,7 @@ public class BootstrapData implements CommandLineRunner {
         order4.setDeliveryZIP(faker.address().zipCode());
         order4.setDeliveryName(faker.name().title());
         order4.setPlacedAt(LocalDateTime.now());
-        order4.setUser(user3);
+        order4.setUser(savedUser3);
         
         orderRepository.save(order1);
         orderRepository.save(order2);
