@@ -131,4 +131,23 @@ class OrderServiceImplTest {
         //then
         verify(orderRepository, times(1)).deleteById(ID_11);
     }
+
+    @Test
+    void shouldFindAllOrdersForSpecificUser_whenUserIdIsGiven() {
+        //given
+        when(orderRepository.findAllByUserId(anyLong())).thenReturn(orders);
+
+        //when
+        OrderListDto actualOrderListDto = orderService.findAllOrdersDtoByUserId(ID_11);
+
+        //then
+        assertAll(() -> {
+            assertThat(actualOrderListDto, notNullValue());
+            assertThat(actualOrderListDto.getOrders().size(), is(2));
+            assertThat(actualOrderListDto.getOrders().get(0).getPlacedAt(), notNullValue());
+            assertThat(actualOrderListDto.getOrders().get(0).getOrderUrl(), notNullValue());
+        });
+
+        verify(orderRepository, times(1)).findAllByUserId(anyLong());
+    }
 }
