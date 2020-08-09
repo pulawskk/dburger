@@ -4,13 +4,11 @@ import com.pulawskk.dburger.api.v1.model.BurgerDto;
 import com.pulawskk.dburger.api.v1.model.BurgerListDto;
 import com.pulawskk.dburger.services.BurgerService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(BurgerController.BURGER_BASE_URL)
+@CrossOrigin
 public class BurgerController {
 
     public static final String BURGER_BASE_URL = "/api/v1/burgers";
