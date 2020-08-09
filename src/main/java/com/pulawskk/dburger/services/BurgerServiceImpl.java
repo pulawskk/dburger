@@ -3,6 +3,7 @@ package com.pulawskk.dburger.services;
 import com.pulawskk.dburger.api.v1.mapper.BurgerMapper;
 import com.pulawskk.dburger.api.v1.model.BurgerDto;
 import com.pulawskk.dburger.api.v1.model.BurgerListDto;
+import com.pulawskk.dburger.controllers.v1.BurgerController;
 import com.pulawskk.dburger.domain.Burger;
 import com.pulawskk.dburger.exceptions.ResourceNotFoundException;
 import com.pulawskk.dburger.repositories.BurgerRepository;
@@ -21,6 +22,14 @@ public class BurgerServiceImpl implements BurgerService {
         this.burgerRepository = burgerRepository;
     }
 
+    /**
+     * Return base url for burgers api
+     * @return url
+     */
+    private String getBurgerBaseUrl() {
+        return BurgerController.BURGER_BASE_URL + "/";
+    }
+
     @Override
     public BurgerDto findBurgerByParameter(String parameter) {
         try {
@@ -37,14 +46,14 @@ public class BurgerServiceImpl implements BurgerService {
     @Override
     public BurgerDto findBurgerByName(String name) {
         BurgerDto burgerDto = mapper.burgerToBurgerDto(burgerRepository.findBurgerByName(name).orElseThrow(ResourceNotFoundException::new));
-        burgerDto.setOrderUrl("/api/v1/burgers/" + burgerDto.getId());
+        burgerDto.setOrderUrl(getBurgerBaseUrl() + burgerDto.getId());
         return burgerDto;
     }
 
     @Override
     public BurgerDto findBurgerById(Long id) {
         BurgerDto burgerDto = mapper.burgerToBurgerDto(burgerRepository.findById(id).orElseThrow(ResourceNotFoundException::new));
-        burgerDto.setOrderUrl("/api/v1/burgers/" + burgerDto.getId());
+        burgerDto.setOrderUrl(getBurgerBaseUrl() + burgerDto.getId());
         return burgerDto;
     }
 
@@ -54,7 +63,7 @@ public class BurgerServiceImpl implements BurgerService {
                 .stream()
                 .map(mapper::burgerToBurgerDto)
                 .map(dto -> {
-                    dto.setOrderUrl("/api/v1/burgers/" + dto.getId());
+                    dto.setOrderUrl(getBurgerBaseUrl() + dto.getId());
                     return dto;
                 })
                 .collect(Collectors.toList()));
@@ -64,7 +73,7 @@ public class BurgerServiceImpl implements BurgerService {
     public BurgerDto createNewBurger(BurgerDto burgerDto) {
         Burger savedBurger = burgerRepository.save(mapper.burgerDtoToBurger(burgerDto));
         BurgerDto savedBurgerDto = mapper.burgerToBurgerDto(savedBurger);
-        savedBurgerDto.setOrderUrl("/api/v1/burgers/" + savedBurger.getId());
+        savedBurgerDto.setOrderUrl(getBurgerBaseUrl() + savedBurger.getId());
         return savedBurgerDto;
     }
 
