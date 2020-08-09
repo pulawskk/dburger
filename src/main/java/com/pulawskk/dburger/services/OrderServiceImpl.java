@@ -1,5 +1,6 @@
 package com.pulawskk.dburger.services;
 
+import com.pulawskk.dburger.api.v1.mapper.BurgerMapper;
 import com.pulawskk.dburger.api.v1.mapper.OrderMapper;
 import com.pulawskk.dburger.api.v1.model.OrderDto;
 import com.pulawskk.dburger.api.v1.model.OrderListDto;
@@ -17,9 +18,11 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final BurgerService burgerService;
 
-    public OrderServiceImpl(OrderRepository orderRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, BurgerService burgerService) {
         this.orderRepository = orderRepository;
+        this.burgerService = burgerService;
     }
 
     public String getOrderUrl() {
@@ -60,6 +63,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto createNewOrder(OrderDto orderDto) {
         Order orderToBeSaved = OrderMapper.INSTANCE.orderDtoToOrder(orderDto);
+        orderToBeSaved.addBurger(
+                BurgerMapper.INSTANCE.burgerDtoToBurger(
+                        burgerService.findBurgerById(orderDto.getBurgerId())));
         orderToBeSaved.setPlacedAt(LocalDateTime.now());
         Order savedOrder = orderRepository.save(orderToBeSaved);
 

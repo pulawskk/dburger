@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -37,12 +38,15 @@ class OrderServiceImplTest {
     @Mock
     OrderRepository orderRepository;
 
+    @Autowired
+    BurgerService burgerService;
+
     @InjectMocks
     OrderServiceImpl orderService;
 
     @BeforeEach
     void setUp() {
-        orderService = new OrderServiceImpl(orderRepository);
+        orderService = new OrderServiceImpl(orderRepository, burgerService);
 
         user = new User();
         user.setFirstName("name");
