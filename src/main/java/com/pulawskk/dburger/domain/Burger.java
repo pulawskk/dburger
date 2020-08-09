@@ -21,7 +21,7 @@ public class Burger {
 
     private BigDecimal price;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Ingredient> ingredients;
 
     public void addIngredient(Ingredient ingredient) {

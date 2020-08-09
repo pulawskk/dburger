@@ -3,6 +3,7 @@ package com.pulawskk.dburger.services;
 import com.pulawskk.dburger.api.v1.model.OrderDto;
 import com.pulawskk.dburger.bootstrap.BootstrapData;
 import com.pulawskk.dburger.domain.Order;
+import com.pulawskk.dburger.repositories.BurgerRepository;
 import com.pulawskk.dburger.repositories.IngredientRepository;
 import com.pulawskk.dburger.repositories.OrderRepository;
 import com.pulawskk.dburger.repositories.UserRepository;
@@ -31,11 +32,14 @@ class OrderServiceImplIT {
     @Autowired
     IngredientRepository ingredientRepository;
 
+    @Autowired
+    BurgerRepository burgerRepository;
+
     OrderServiceImpl orderService;
 
     @BeforeEach
     void setUp() throws Exception {
-        BootstrapData bootstrapData = new BootstrapData(userRepository, orderRepository, ingredientRepository);
+        BootstrapData bootstrapData = new BootstrapData(userRepository, orderRepository, ingredientRepository, burgerRepository);
         bootstrapData.run();
 
         orderService = new OrderServiceImpl(orderRepository);

@@ -1,16 +1,19 @@
 package com.pulawskk.dburger.bootstrap;
 
 import com.github.javafaker.Faker;
+import com.pulawskk.dburger.domain.Burger;
 import com.pulawskk.dburger.domain.Ingredient;
 import com.pulawskk.dburger.domain.Order;
 import com.pulawskk.dburger.domain.User;
 import com.pulawskk.dburger.enums.IngredientType;
+import com.pulawskk.dburger.repositories.BurgerRepository;
 import com.pulawskk.dburger.repositories.IngredientRepository;
 import com.pulawskk.dburger.repositories.OrderRepository;
 import com.pulawskk.dburger.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Component
@@ -19,34 +22,32 @@ public class BootstrapData implements CommandLineRunner {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final IngredientRepository ingredientRepository;
+    private final BurgerRepository burgerRepository;
     private final Faker faker;
 
-    public BootstrapData(UserRepository userRepository, OrderRepository orderRepository, IngredientRepository ingredientRepository) {
+    public BootstrapData(UserRepository userRepository, OrderRepository orderRepository, IngredientRepository ingredientRepository, BurgerRepository burgerRepository) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
         this.ingredientRepository = ingredientRepository;
+        this.burgerRepository = burgerRepository;
         this.faker = new Faker();
     }
 
     @Override
     public void run(String... args) throws Exception {
         User user1 = new User();
-        user1.setId(1L);
         user1.setFirstName("John");
         user1.setLastName("Dohn");
         user1.setEmail("jd@gmail.com");
         User user2 = new User();
-        user2.setId(2L);
         user2.setFirstName("Eva");
         user2.setLastName("Evans");
         user2.setEmail("ee@gmail.com");
         User user3 = new User();
-        user3.setId(3L);
         user3.setFirstName("Sammy");
         user3.setLastName("Tammy");
         user3.setEmail("st@gmail.com");
         User user4 = new User();
-        user4.setId(4L);
         user4.setFirstName("Toni");
         user4.setLastName("Boni");
         user4.setEmail("tb@gmail.com");
@@ -149,6 +150,14 @@ public class BootstrapData implements CommandLineRunner {
         ingredient10.setIngredientType(IngredientType.ADDITION);
         ingredient10.setName("bacon");
 
+        Ingredient ingredient11 = new Ingredient();
+        ingredient11.setIngredientType(IngredientType.SAUCE);
+        ingredient11.setName("ketchup");
+
+        Ingredient ingredient12 = new Ingredient();
+        ingredient12.setIngredientType(IngredientType.SAUCE);
+        ingredient12.setName("mayo");
+
         ingredientRepository.save(ingredient1);
         ingredientRepository.save(ingredient2);
         ingredientRepository.save(ingredient3);
@@ -159,5 +168,61 @@ public class BootstrapData implements CommandLineRunner {
         ingredientRepository.save(ingredient8);
         ingredientRepository.save(ingredient9);
         ingredientRepository.save(ingredient10);
+        ingredientRepository.save(ingredient11);
+        ingredientRepository.save(ingredient12);
+
+        Burger burger1 = new Burger();
+        burger1.setName("classic");
+        burger1.setPrice(new BigDecimal("20.99"));
+        burgerRepository.save(burger1);
+        burger1.addIngredient(ingredient1);
+        burger1.addIngredient(ingredient4);
+        burger1.addIngredient(ingredient7);
+        burger1.addIngredient(ingredient8);
+        burger1.addIngredient(ingredient11);
+
+        Burger burger2 = new Burger();
+        burger2.setName("cheese");
+        burger2.setPrice(new BigDecimal("23.99"));
+        burgerRepository.save(burger2);
+        burger2.addIngredient(ingredient1);
+        burger2.addIngredient(ingredient4);
+        burger2.addIngredient(ingredient6);
+        burger2.addIngredient(ingredient7);
+        burger2.addIngredient(ingredient8);
+        burger2.addIngredient(ingredient10);
+        burger2.addIngredient(ingredient11);
+        burger2.addIngredient(ingredient12);
+
+        Burger burger3 = new Burger();
+        burger3.setName("light");
+        burger3.setPrice(new BigDecimal("22.99"));
+        burgerRepository.save(burger3);
+        burger3.addIngredient(ingredient2);
+        burger3.addIngredient(ingredient5);
+        burger3.addIngredient(ingredient6);
+        burger3.addIngredient(ingredient7);
+        burger3.addIngredient(ingredient8);
+        burger3.addIngredient(ingredient11);
+
+        Burger burger4 = new Burger();
+        burger4.setName("mega");
+        burger4.setPrice(new BigDecimal("26.99"));
+        burgerRepository.save(burger4);
+        burger4.addIngredient(ingredient2);
+        burger4.addIngredient(ingredient5);
+        burger4.addIngredient(ingredient6);
+        burger4.addIngredient(ingredient7);
+        burger4.addIngredient(ingredient8);
+        burger4.addIngredient(ingredient9);
+        burger4.addIngredient(ingredient10);
+        burger4.addIngredient(ingredient11);
+        burger4.addIngredient(ingredient12);
+
+        burgerRepository.saveAndFlush(burger1);
+        burgerRepository.saveAndFlush(burger2);
+        burgerRepository.saveAndFlush(burger3);
+        burgerRepository.saveAndFlush(burger4);
+
     }
 }
