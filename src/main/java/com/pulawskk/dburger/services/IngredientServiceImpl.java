@@ -3,6 +3,7 @@ package com.pulawskk.dburger.services;
 import com.pulawskk.dburger.api.v1.mapper.IngredientMapper;
 import com.pulawskk.dburger.api.v1.model.IngredientDto;
 import com.pulawskk.dburger.api.v1.model.IngredientListDto;
+import com.pulawskk.dburger.controllers.v1.IngredientController;
 import com.pulawskk.dburger.repositories.IngredientRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,10 @@ public class IngredientServiceImpl implements IngredientService {
 
     public IngredientServiceImpl(IngredientRepository ingredientRepository) {
         this.ingredientRepository = ingredientRepository;
+    }
+
+    private static String getIngredientBaseUrl() {
+        return IngredientController.INGREDIENT_BASE_URL + "/";
     }
 
     @Override
@@ -38,7 +43,12 @@ public class IngredientServiceImpl implements IngredientService {
     public IngredientListDto findAllIngredients() {
         return new IngredientListDto(ingredientRepository.findAll()
                 .stream()
-                .map(mapper::ingredientToIngredientDto).collect(Collectors.toList()));
+                .map(mapper::ingredientToIngredientDto)
+                .map(dto -> {
+                    dto.setUrl(getIngredientBaseUrl() + dto.getId());
+                    return dto;
+                })
+                .collect(Collectors.toList()));
     }
 
     @Override
