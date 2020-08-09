@@ -3,6 +3,7 @@ package com.pulawskk.dburger.services;
 import com.pulawskk.dburger.api.v1.model.OrderDto;
 import com.pulawskk.dburger.bootstrap.BootstrapData;
 import com.pulawskk.dburger.domain.Order;
+import com.pulawskk.dburger.repositories.IngredientRepository;
 import com.pulawskk.dburger.repositories.OrderRepository;
 import com.pulawskk.dburger.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,11 +28,14 @@ class OrderServiceImplIT {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    IngredientRepository ingredientRepository;
+
     OrderServiceImpl orderService;
 
     @BeforeEach
     void setUp() throws Exception {
-        BootstrapData bootstrapData = new BootstrapData(userRepository, orderRepository);
+        BootstrapData bootstrapData = new BootstrapData(userRepository, orderRepository, ingredientRepository);
         bootstrapData.run();
 
         orderService = new OrderServiceImpl(orderRepository);

@@ -1,29 +1,30 @@
 package com.pulawskk.dburger.bootstrap;
 
 import com.github.javafaker.Faker;
-import com.github.javafaker.service.FakeValuesService;
-import com.github.javafaker.service.RandomService;
+import com.pulawskk.dburger.domain.Ingredient;
 import com.pulawskk.dburger.domain.Order;
 import com.pulawskk.dburger.domain.User;
+import com.pulawskk.dburger.enums.IngredientType;
+import com.pulawskk.dburger.repositories.IngredientRepository;
 import com.pulawskk.dburger.repositories.OrderRepository;
 import com.pulawskk.dburger.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
-import java.util.Random;
 
 @Component
 public class BootstrapData implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
+    private final IngredientRepository ingredientRepository;
     private final Faker faker;
 
-    public BootstrapData(UserRepository userRepository, OrderRepository orderRepository) {
+    public BootstrapData(UserRepository userRepository, OrderRepository orderRepository, IngredientRepository ingredientRepository) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
+        this.ingredientRepository = ingredientRepository;
         this.faker = new Faker();
     }
 
@@ -107,5 +108,56 @@ public class BootstrapData implements CommandLineRunner {
         orderRepository.save(order2);
         orderRepository.save(order3);
         orderRepository.save(order4);
+
+        Ingredient ingredient1 = new Ingredient();
+        ingredient1.setIngredientType(IngredientType.ROLL);
+        ingredient1.setName("wheat");
+
+        Ingredient ingredient2 = new Ingredient();
+        ingredient2.setIngredientType(IngredientType.ROLL);
+        ingredient2.setName("rye");
+
+        Ingredient ingredient3 = new Ingredient();
+        ingredient3.setIngredientType(IngredientType.MEAT);
+        ingredient3.setName("rare");
+
+        Ingredient ingredient4 = new Ingredient();
+        ingredient4.setIngredientType(IngredientType.MEAT);
+        ingredient4.setName("medium");
+
+        Ingredient ingredient5 = new Ingredient();
+        ingredient5.setIngredientType(IngredientType.MEAT);
+        ingredient5.setName("well done");
+
+        Ingredient ingredient6 = new Ingredient();
+        ingredient6.setIngredientType(IngredientType.VEGETABLE);
+        ingredient6.setName("tomato");
+
+        Ingredient ingredient7 = new Ingredient();
+        ingredient7.setIngredientType(IngredientType.VEGETABLE);
+        ingredient7.setName("lettuce");
+
+        Ingredient ingredient8 = new Ingredient();
+        ingredient8.setIngredientType(IngredientType.VEGETABLE);
+        ingredient8.setName("onion");
+
+        Ingredient ingredient9 = new Ingredient();
+        ingredient9.setIngredientType(IngredientType.ADDITION);
+        ingredient9.setName("cheese");
+
+        Ingredient ingredient10 = new Ingredient();
+        ingredient10.setIngredientType(IngredientType.ADDITION);
+        ingredient10.setName("bacon");
+
+        ingredientRepository.save(ingredient1);
+        ingredientRepository.save(ingredient2);
+        ingredientRepository.save(ingredient3);
+        ingredientRepository.save(ingredient4);
+        ingredientRepository.save(ingredient5);
+        ingredientRepository.save(ingredient6);
+        ingredientRepository.save(ingredient7);
+        ingredientRepository.save(ingredient8);
+        ingredientRepository.save(ingredient9);
+        ingredientRepository.save(ingredient10);
     }
 }
