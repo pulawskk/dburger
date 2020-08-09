@@ -1,5 +1,6 @@
 package com.pulawskk.dburger.controllers.v1;
 
+import com.pulawskk.dburger.api.v1.model.IngredientDto;
 import com.pulawskk.dburger.api.v1.model.IngredientListDto;
 import com.pulawskk.dburger.services.IngredientService;
 import org.springframework.http.HttpStatus;
@@ -27,5 +28,17 @@ public class IngredientController {
     @ResponseStatus(HttpStatus.OK)
     public IngredientListDto getIngredientsByParameter(@PathVariable String parameter) {
         return ingredientService.findByParameter(parameter);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public IngredientDto saveNewIngredient(@RequestBody IngredientDto ingredientDto) {
+        return ingredientService.addNewIngredient(ingredientDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteIngredient(@PathVariable Long id) {
+        ingredientService.deleteIngredientById(id);
     }
 }
