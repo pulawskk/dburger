@@ -19,6 +19,6 @@ public class Ingredient {
     @Column(name = "type")
     private IngredientType ingredientType;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 }
