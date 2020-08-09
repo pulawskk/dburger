@@ -35,6 +35,9 @@ class OrderServiceImplIT {
     @Autowired
     BurgerRepository burgerRepository;
 
+    @Autowired
+    BurgerService burgerService;
+
     OrderServiceImpl orderService;
 
     @BeforeEach
@@ -42,7 +45,7 @@ class OrderServiceImplIT {
         BootstrapData bootstrapData = new BootstrapData(userRepository, orderRepository, ingredientRepository, burgerRepository);
         bootstrapData.run();
 
-        orderService = new OrderServiceImpl(orderRepository);
+        orderService = new OrderServiceImpl(orderRepository, burgerService);
     }
 
     /**

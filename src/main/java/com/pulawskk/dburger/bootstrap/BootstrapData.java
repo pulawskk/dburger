@@ -224,5 +224,13 @@ public class BootstrapData implements CommandLineRunner {
         burgerRepository.saveAndFlush(burger3);
         burgerRepository.saveAndFlush(burger4);
 
+        order1.addBurger(burger1);
+        order2.addBurger(burger2);
+        order3.addBurger(burger3);
+        order4.addBurger(burger4);
+        orderRepository.saveAndFlush(order1);
+        orderRepository.saveAndFlush(order2);
+        orderRepository.saveAndFlush(order3);
+        orderRepository.saveAndFlush(order4);
     }
 }
