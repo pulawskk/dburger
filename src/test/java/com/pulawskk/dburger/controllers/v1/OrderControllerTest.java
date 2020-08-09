@@ -34,6 +34,7 @@ class OrderControllerTest {
 
     public static final String DELIVERY_NAME = "Delivery test name";
     public static final long ID = 11L;
+
     @InjectMocks
     OrderController orderController;
 
