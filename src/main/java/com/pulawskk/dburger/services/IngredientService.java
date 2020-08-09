@@ -7,7 +7,7 @@ public interface IngredientService {
 
     IngredientDto findIngredientById(Long id);
 
-    IngredientDto findIngredientByName(Long name);
+    IngredientDto findIngredientByName(String name);
 
     IngredientListDto findIngredientsByType(String type);
 
@@ -16,4 +16,6 @@ public interface IngredientService {
     IngredientDto addNewIngredient(IngredientDto ingredientDto);
 
     void deleteIngredientById(Long id);
+
+    IngredientListDto findByParameter(String parameter);
 }

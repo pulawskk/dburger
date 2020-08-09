@@ -3,10 +3,7 @@ package com.pulawskk.dburger.controllers.v1;
 import com.pulawskk.dburger.api.v1.model.IngredientListDto;
 import com.pulawskk.dburger.services.IngredientService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(IngredientController.INGREDIENT_BASE_URL)
@@ -24,5 +21,11 @@ public class IngredientController {
     @ResponseStatus(HttpStatus.OK)
     public IngredientListDto getAllIngredients() {
         return ingredientService.findAllIngredients();
+    }
+
+    @GetMapping("/{parameter}")
+    @ResponseStatus(HttpStatus.OK)
+    public IngredientListDto getIngredientsByParameter(@PathVariable String parameter) {
+        return ingredientService.findByParameter(parameter);
     }
 }
