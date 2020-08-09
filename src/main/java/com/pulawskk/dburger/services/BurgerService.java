@@ -14,4 +14,6 @@ public interface BurgerService {
     BurgerDto createNewBurger(BurgerDto burgerDto);
 
     void deleteBurgerById(Long id);
+
+    BurgerDto findBurgerByParameter(String parameter);
 }

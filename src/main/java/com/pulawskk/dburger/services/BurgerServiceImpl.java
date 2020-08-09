@@ -17,8 +17,21 @@ public class BurgerServiceImpl implements BurgerService {
 
     private final BurgerRepository burgerRepository;
 
-    public BurgerServiceImpl(BurgerMapper mapper, BurgerRepository burgerRepository) {
+    public BurgerServiceImpl(BurgerRepository burgerRepository) {
         this.burgerRepository = burgerRepository;
+    }
+
+    @Override
+    public BurgerDto findBurgerByParameter(String parameter) {
+        try {
+            Long id = Long.parseLong(parameter);
+            if (id > 0) {
+                return findBurgerById(id);
+            }
+        } catch (NumberFormatException exception) {
+            return findBurgerByName(parameter);
+        }
+        throw new ResourceNotFoundException("Not found burger with parameter: " + parameter);
     }
 
     @Override
