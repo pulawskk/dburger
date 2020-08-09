@@ -10,5 +10,5 @@ public class BurgerDto {
     private String price;
 
     @JsonProperty(value = "order_url")
-    private String order_url;
+    private String orderUrl;
 }

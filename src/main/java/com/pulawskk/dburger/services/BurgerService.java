@@ -12,4 +12,6 @@ public interface BurgerService {
     BurgerListDto findAllBurgers();
 
     BurgerDto createNewBurger(BurgerDto burgerDto);
+
+    void deleteBurgerById(Long id);
 }
