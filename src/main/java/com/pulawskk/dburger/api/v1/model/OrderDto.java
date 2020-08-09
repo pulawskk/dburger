@@ -23,4 +23,7 @@ public class OrderDto {
     private String orderUrl;
 
     private Long userId;
+
+    @JsonProperty(value = "burger_id")
+    private Long burgerId;
 }

@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -27,5 +29,15 @@ public class Order {
 
     @ManyToOne
     private User user;
+
+    @ManyToMany
+    private List<Burger> burgers;
+
+    public void addBurger(Burger burger) {
+        if (this.burgers == null) {
+            this.burgers = new ArrayList<>();
+        }
+        this.burgers.add(burger);
+    }
 }
 
