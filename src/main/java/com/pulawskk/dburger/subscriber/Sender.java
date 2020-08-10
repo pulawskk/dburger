@@ -39,7 +39,7 @@ public class Sender {
         this.apihost = apihost;
     }
 
-    @Scheduled(fixedRate = 4000)
+    @Scheduled(fixedRate = 7000)
     public void sendMessage() {
         RestTemplate restTemplate = restTemplateBuilder.build();
 
@@ -51,14 +51,15 @@ public class Sender {
                 payload, OrderDto.class);
 
         if (response.getId() != null && response.getId() > 0) {
-            System.out.println("Order has been placed with id: " + response.getId());
+            System.out.println();
             OrderPlacedMessage orderPlacedMessage =
                     OrderPlacedMessage.builder()
-                            .message("hello 123")
+                            .message(" <-=-> order id: " + response.getId())
                             .id(ThreadLocalRandom.current().nextLong())
                             .build();
 
             jmsTemplate.convertAndSend(JmsConfig.QUEUE_ORDER_SEND, orderPlacedMessage);
+            System.out.println("order has been placed");
         }
     }
 
