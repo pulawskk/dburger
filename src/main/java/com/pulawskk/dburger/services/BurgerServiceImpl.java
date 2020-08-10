@@ -14,11 +14,12 @@ import java.util.stream.Collectors;
 @Service
 public class BurgerServiceImpl implements BurgerService {
 
-    private final BurgerMapper mapper = BurgerMapper.INSTANCE;
+    private final BurgerMapper mapper;
 
     private final BurgerRepository burgerRepository;
 
-    public BurgerServiceImpl(BurgerRepository burgerRepository) {
+    public BurgerServiceImpl(BurgerMapper mapper, BurgerRepository burgerRepository) {
+        this.mapper = mapper;
         this.burgerRepository = burgerRepository;
     }
 

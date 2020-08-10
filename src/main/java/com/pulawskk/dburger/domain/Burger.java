@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "burgers")
@@ -29,5 +30,9 @@ public class Burger {
             this.ingredients = new ArrayList<>();
         }
         this.ingredients.add(ingredient);
+    }
+
+    public String toStringIngredients() {
+        return ingredients.stream().map(Ingredient::getName).collect(Collectors.joining(","));
     }
 }

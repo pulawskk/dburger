@@ -1,5 +1,6 @@
 package com.pulawskk.dburger.services;
 
+import com.pulawskk.dburger.api.v1.mapper.BurgerMapper;
 import com.pulawskk.dburger.api.v1.model.OrderDto;
 import com.pulawskk.dburger.api.v1.model.OrderListDto;
 import com.pulawskk.dburger.domain.Order;
@@ -44,9 +45,11 @@ class OrderServiceImplTest {
     @InjectMocks
     OrderServiceImpl orderService;
 
+    BurgerMapper burgerMapper = BurgerMapper.INSTANCE;
+
     @BeforeEach
     void setUp() {
-        orderService = new OrderServiceImpl(orderRepository, burgerService);
+        orderService = new OrderServiceImpl(orderRepository, burgerService, burgerMapper);
 
         user = new User();
         user.setFirstName("name");

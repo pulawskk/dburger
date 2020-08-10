@@ -19,10 +19,12 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final BurgerService burgerService;
+    private final BurgerMapper burgerMapper;
 
-    public OrderServiceImpl(OrderRepository orderRepository, BurgerService burgerService) {
+    public OrderServiceImpl(OrderRepository orderRepository, BurgerService burgerService, BurgerMapper burgerMapper) {
         this.orderRepository = orderRepository;
         this.burgerService = burgerService;
+        this.burgerMapper = burgerMapper;
     }
 
     public String getOrderUrl() {
@@ -64,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto createNewOrder(OrderDto orderDto) {
         Order orderToBeSaved = OrderMapper.INSTANCE.orderDtoToOrder(orderDto);
         orderToBeSaved.addBurger(
-                BurgerMapper.INSTANCE.burgerDtoToBurger(
+                burgerMapper.burgerDtoToBurger(
                         burgerService.findBurgerById(orderDto.getBurgerId())));
         orderToBeSaved.setPlacedAt(LocalDateTime.now());
         Order savedOrder = orderRepository.save(orderToBeSaved);

@@ -1,5 +1,7 @@
 package com.pulawskk.dburger.services;
 
+import com.pulawskk.dburger.api.v1.mapper.BurgerMapper;
+import com.pulawskk.dburger.api.v1.mapper.BurgerMapperDecorator;
 import com.pulawskk.dburger.api.v1.model.OrderDto;
 import com.pulawskk.dburger.bootstrap.BootstrapData;
 import com.pulawskk.dburger.domain.Order;
@@ -39,13 +41,14 @@ class OrderServiceImplIT {
     BurgerService burgerService;
 
     OrderServiceImpl orderService;
+    BurgerMapper burgerMapper = BurgerMapper.INSTANCE;
 
     @BeforeEach
     void setUp() throws Exception {
         BootstrapData bootstrapData = new BootstrapData(userRepository, orderRepository, ingredientRepository, burgerRepository);
         bootstrapData.run();
 
-        orderService = new OrderServiceImpl(orderRepository, burgerService);
+        orderService = new OrderServiceImpl(orderRepository, burgerService, burgerMapper);
     }
 
     /**

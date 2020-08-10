@@ -56,7 +56,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public OrderDto createOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) {
         orderDto.setUserId(id);
-        System.out.println(orderDto.getBurgerId());
         return orderService.createNewOrder(orderDto);
     }
 

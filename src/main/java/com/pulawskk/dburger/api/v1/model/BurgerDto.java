@@ -11,4 +11,6 @@ public class BurgerDto {
 
     @JsonProperty(value = "order_url")
     private String orderUrl;
+
+    private String ingredientsJson;
 }
