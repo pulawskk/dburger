@@ -10,6 +10,7 @@ import org.springframework.jms.support.converter.MessageType;
 public class JmsConfig {
 
     public static final String QUEUE_ORDER_SEND = "order-sending-queue";
+    public static final String QUEUE_ORDER_SEND_RECEIVE = "order-sending-queue-receive";
 
     @Bean
     public MessageConverter messageConverter() {
